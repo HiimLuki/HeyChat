@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5e2028</color>
+    <color name="colorPrimaryDark">#550000</color>
+    <color name="colorAccent">#ce0000</color>
+
+    <array name = "dot_colors">
+
+        <item>#03A9F4</item>
+        <item>#E65100</item>
+        <item>#FFBB00</item>
+
+    </array>
+</resources>

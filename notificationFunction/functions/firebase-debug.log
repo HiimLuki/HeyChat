@@ -1,0 +1,27 @@
+[debug] [2018-08-13T12:25:41.808Z] ----------------------------------------------------------------------
+[debug] [2018-08-13T12:25:41.813Z] Command:       D:\nodejs\node.exe C:\Users\xmrvi\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] [2018-08-13T12:25:41.813Z] CLI Version:   3.19.0
+[debug] [2018-08-13T12:25:41.813Z] Platform:      win32
+[debug] [2018-08-13T12:25:41.813Z] Node Version:  v8.11.3
+[debug] [2018-08-13T12:25:41.813Z] Time:          Mon Aug 13 2018 14:25:41 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2018-08-13T12:25:41.813Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-08-13T12:25:41.845Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-08-13T12:25:41.846Z] > authorizing via signed-in user
+[debug] [2018-08-13T12:25:41.847Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-08-13T12:25:41.847Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/ysJlTTjoijytr-LXpF3N0Api-Uqi4fasSmeLVWxjGfpjGm4oCvKcg2XvPE1hBV11',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Mon Aug 13 2018 14:25:41 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2018-08-13T12:25:42.119Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-13T12:25:42.129Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/heychat-b328f  
+  
+ Mon Aug 13 2018 14:25:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2018-08-13T12:25:42.882Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-13T12:25:42.882Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/heychat-b328f/tokens  
+  
+ Mon Aug 13 2018 14:25:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2018-08-13T12:25:43.590Z] <<< HTTP RESPONSE 200
