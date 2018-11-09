@@ -4,46 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/start"
+    android:background="@drawable/hintergrund"
     tools:context=".StartActivity">
 
     <Button
         android:id="@+id/start_reg_btn"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/signup"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_login_btn"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/Icon" />
 
     <Button
         android:id="@+id/start_login_btn"
-        android:layout_width="282dp"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="320dp"
-        android:background="@drawable/loginstart"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/signin"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/Icon" />
+
+    <ImageView
+        android:id="@+id/Icon"
+        android:layout_width="135dp"
+        android:layout_height="131dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/hey_icon" />
 
 </android.support.constraint.ConstraintLayout>
