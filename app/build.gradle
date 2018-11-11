@@ -21,6 +21,7 @@ android {
 allprojects {
     repositories {
         maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/spark/maven' }
     }
 }
 
@@ -64,6 +65,11 @@ dependencies {
 
     //Field
     implementation 'tyrantgit:explosionfield:1.0.1'
+
+    //Animated Buttons
+    implementation 'com.github.rey5137:material:1.2.5'
+    //Submit
+    implementation 'me.spark:submitbutton:1.0.1'
 }
 
 

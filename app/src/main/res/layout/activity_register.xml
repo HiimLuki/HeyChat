@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fade"
+    android:background="@drawable/register"
     tools:context=".RegisterActivity">
 
     <include
@@ -14,72 +14,126 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/reg_display_name"
-        android:layout_width="247dp"
-        android:layout_height="50dp"
+        android:layout_width="253dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="228dp"
-        android:background="@drawable/nick"
+        android:layout_marginTop="185dp"
+        android:background="@drawable/nickname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_toolbar">
 
         <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginStart="30dp"
-            android:hint="Nickname" />
+            android:layout_width="201dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="34dp"
+            android:hint="Nickname"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textColorLink="@android:color/white" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/reg_email"
-        android:layout_width="247dp"
-        android:layout_height="47dp"
+        android:layout_width="253dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/ema"
+        android:background="@drawable/registeremail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_display_name">
 
         <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="33dp"
-            android:layout_marginStart="30dp"
-            android:hint="Email" />
+            android:layout_width="201dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="34dp"
+            android:hint="Email"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textColorLink="@android:color/white" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/reg_password"
-        android:layout_width="249dp"
-        android:layout_height="48dp"
+        android:layout_width="253dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/pass"
+        android:background="@drawable/registerpassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_email">
 
         <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginStart="30dp"
-            android:hint="Passwort" />
+            android:layout_width="201dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="34dp"
+            android:hint="Passwort"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textColorLink="@android:color/white" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/reg_create_btn"
         android:layout_width="236dp"
         android:layout_height="53dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/loginsignup"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_password" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="201dp"
+        android:layout_height="95dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_password"
+        app:layout_constraintVertical_bias="0.241">
+
+        <com.spark.submitbutton.SubmitButton
+            android:layout_width="match_parent"
+            android:layout_height="98dp"
+            android:text="Submit"
+            android:textColor="@color/white"
+            app:sub_btn_background="@color/red"
+            app:sub_btn_duration="3000"
+            app:sub_btn_line_color="@color/white"
+            app:sub_btn_ripple_color="@color/white"
+            app:sub_btn_tick_color="@color/red"
+            tools:layout_editor_absoluteX="3dp"
+            tools:layout_editor_absoluteY="496dp" />
+    </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/reg_account"
+        android:layout_width="209dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/accountbutton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_create_btn"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </android.support.constraint.ConstraintLayout>

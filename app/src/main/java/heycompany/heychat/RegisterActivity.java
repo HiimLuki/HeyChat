@@ -29,6 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout mEmail;
     private TextInputLayout mPasswort;
     private Button mCreateBtn;
+    private Button mAccount;
 
     //Firebase auth
     private FirebaseAuth mAuth;
@@ -60,6 +61,15 @@ public class RegisterActivity extends AppCompatActivity {
         mEmail = (TextInputLayout) findViewById(R.id.reg_email);
         mPasswort = (TextInputLayout) findViewById(R.id.reg_password);
         mCreateBtn = (Button) findViewById(R.id.reg_create_btn);
+        mAccount = (Button) findViewById(R.id.reg_account);
+
+        mAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent account_intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(account_intent);
+            }
+        });
 
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
