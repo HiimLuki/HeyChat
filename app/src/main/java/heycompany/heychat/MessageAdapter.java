@@ -1,10 +1,13 @@
 package heycompany.heychat;
 
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -48,8 +52,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         public TextView messageText;
         public TextView messageTextIch;
         public ImageView messageImage;
-
+        public ImageView messageVoice;
         public CircleImageView profileImage;
+
 
         public MessageViewHolder(View view) {
             super(view);
@@ -57,6 +62,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageText = (TextView) view.findViewById(R.id.message_text_layout);
             messageTextIch = (TextView) view.findViewById(R.id.message_text_layout);
             messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
+            messageVoice = (ImageView) view.findViewById(R.id.message_voice_layout);
+            messageVoice.setClickable(true);
+
+
+            messageVoice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    play_sound(v);
+                }
+            });
         }
     }
 
@@ -80,17 +95,26 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
         viewHolder.messageText.setText(c.getMessage());
 
+
         if(message_type.equals("text")){
 
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.messageImage.setVisibility(View.INVISIBLE);
+            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
         }
-        else
-        {
+        else if (message_type.equals("voice")){
+                viewHolder.messageImage.setVisibility(View.INVISIBLE);
+                viewHolder.messageText.setVisibility(View.INVISIBLE);
+                viewHolder.messageVoice.setVisibility(View.VISIBLE);
+        }
+        else if( message_type.equals("image")) {
+
             viewHolder.messageText.setVisibility(View.INVISIBLE);
+            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(viewHolder.messageImage);
 
         }
+
     }
 
 
@@ -98,6 +122,26 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public int getItemCount() {
         return mMessageList.size();
+    }
+
+    private void play_sound(View v){
+
+        String url ="https://firebasestorage.googleapis.com/v0/b/heychat-b328f.appspot.com/o/voice_message%2F-LR8jWg9ruoDBx7RmDKt.3gp?alt=media&token=c7019d89-e195-4a60-a259-285bff12e10b"; // your URL here
+        final MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try{
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+            mediaPlayer.prepare();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }

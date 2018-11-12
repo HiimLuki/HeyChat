@@ -76,4 +76,15 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/mRecordBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/messages_list"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="88dp"
+        android:background="@drawable/rounded_button"
+        android:text="Record" />
+
 </RelativeLayout>

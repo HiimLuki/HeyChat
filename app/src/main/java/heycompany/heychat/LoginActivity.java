@@ -2,6 +2,8 @@ package heycompany.heychat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +22,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
+
 public class LoginActivity extends AppCompatActivity {
 
     //TextInputs und Button
     private TextInputLayout mLoginEmail;
     private TextInputLayout mLoginPasswort;
     private Button mLoginBtn;
+
+    private Button button2;
 
     //Toolbar oben initialisieren
     private android.support.v7.widget.Toolbar mToolbar;
@@ -46,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Login");
+
+        button2 = (Button) findViewById(R.id.button2);
 
         mLoginProgress = new ProgressDialog(this);
 
@@ -70,6 +78,13 @@ public class LoginActivity extends AppCompatActivity {
                     mLoginProgress.show();
                     loginUser(email, password);
                 }
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                play_sound(v);
             }
         });
 
@@ -107,5 +122,26 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void play_sound(View v){
+
+        String url = "https://firebasestorage.googleapis.com/v0/b/heychat-b328f.appspot.com/o/voice_message%2Fstay.mp3?alt=media&token=6fafcaef-b6c6-41af-b6a1-55f8e3c43d12"; // your URL here
+        final MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try{
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+            mediaPlayer.prepare();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 }

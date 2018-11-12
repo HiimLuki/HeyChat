@@ -2,8 +2,14 @@ package heycompany.heychat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Image;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +20,9 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
@@ -22,6 +30,7 @@ import android.widget.TextView;
 
 import com.bhargavms.dotloader.DotLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +48,8 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +84,7 @@ public class ChatActivity extends AppCompatActivity {
 
     //Storage
     private StorageReference mImageStorage;
+    private StorageReference mAudioStorage;
 
     //Online Status
     private DatabaseReference mUserRef;
@@ -80,6 +92,12 @@ public class ChatActivity extends AppCompatActivity {
 
     //Dot
     private DotLoader dotloader;
+
+    //VoiceMessage
+    private Button mRecordBtn;
+    private MediaRecorder mRecorder;
+    private String mFileName = null;
+    private static final String LOG_TAG = "Record_log";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +162,12 @@ public class ChatActivity extends AppCompatActivity {
 
         //Chatwatcher
         mChatMessageView.addTextChangedListener(writeTextWatcher);
+
+        //recordbtn
+        mRecordBtn = (Button) findViewById(R.id.mRecordBtn);
+
+        //Audio
+        mAudioStorage = FirebaseStorage.getInstance().getReference();
 
 
         mRootRef.child("Users").child(mChatUser).addValueEventListener(new ValueEventListener() {
@@ -227,6 +251,29 @@ public class ChatActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
             }
         });
+
+        //VoiceMessage
+
+        mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+        mFileName += "/recorded_audio.3gp";
+
+        mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+
+                    startRecording();
+
+                }else if (event.getAction() == MotionEvent.ACTION_UP){
+
+                    stopRecording();
+                    uploadAudio();
+
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -288,7 +335,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
     }
-
 
     private void loadMessages() {
 
@@ -409,4 +455,81 @@ public class ChatActivity extends AppCompatActivity {
 
         }
     };
+
+    private void startRecording() {
+        mRecorder = new MediaRecorder();
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setOutputFile(mFileName);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            mRecorder.prepare();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+
+        mRecorder.start();
+    }
+
+    private void stopRecording() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
+    private void uploadAudio(){
+
+        DatabaseReference user_message_push = mRootRef.child("messages")
+                .child(mCurrentUserID).child(mChatUser).push();
+        final String current_user_ref = "messages/" + mCurrentUserID + "/" + mChatUser;
+        final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserID;
+
+        final String push_id = user_message_push.getKey();
+
+        StorageReference filepath = mAudioStorage.child("voice_message").child(push_id +".3gp");
+
+        Uri uri = Uri.fromFile(new File(mFileName));
+
+
+
+        filepath.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+
+                    String download_url = task.getResult().getDownloadUrl().toString();
+
+                    Map messageMap = new HashMap();
+                    messageMap.put("message", download_url);
+                    messageMap.put("seen", false);
+                    messageMap.put("type", "voice");
+                    messageMap.put("time", ServerValue.TIMESTAMP);
+                    messageMap.put("from", mCurrentUserID);
+
+                    Map messageUserMap = new HashMap();
+                    messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
+                    messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+
+                    mChatMessageView.setText("");
+
+                    mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                            if(databaseError != null){
+
+                                Log.d("CHAT_LOG", databaseError.getMessage().toString());
+
+                            }
+
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+
 }

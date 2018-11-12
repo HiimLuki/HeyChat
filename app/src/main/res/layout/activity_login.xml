@@ -15,16 +15,16 @@
         android:id="@+id/log_email"
         android:layout_width="290dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="292dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="100dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:textColorHint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
@@ -37,8 +37,8 @@
         android:layout_width="290dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:textColorHint="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
@@ -77,5 +77,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/login_toolbar"
         app:srcCompat="@drawable/heychattext" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="452dp" />
 
 </android.support.constraint.ConstraintLayout>
