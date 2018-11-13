@@ -4,7 +4,8 @@
     android:id="@+id/message_single_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="10dp"
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/message_text_layout"
@@ -14,10 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="7dp"
         android:background="@drawable/message_text_background"
-        android:paddingBottom="8dp"
-        android:paddingEnd="13dp"
         android:paddingStart="13dp"
         android:paddingTop="8dp"
+        android:paddingEnd="13dp"
+        android:paddingBottom="8dp"
         android:text="TextView"
         android:textColor="@android:color/white"
         android:textSize="15sp" />

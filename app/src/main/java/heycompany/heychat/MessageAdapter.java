@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -28,6 +29,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     private FirebaseAuth mAuth;
     private List<Messages> mMessageList;
+
+    public String voice;
 
     public MessageAdapter(List<Messages> mMessageList) {
 
@@ -69,7 +72,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageVoice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    play_sound(v);
+
+
                 }
             });
         }
@@ -83,6 +87,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         Messages c = mMessageList.get(i);
         String from_user = c.getFrom();
         String message_type = c.getType();
+        voice = c.getMessage();
 
         if(from_user.equals(current_user_id)){
             viewHolder.messageTextIch.setBackgroundResource(R.drawable.message_text_backgroundich);
@@ -95,7 +100,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
         viewHolder.messageText.setText(c.getMessage());
 
-
         if(message_type.equals("text")){
 
             viewHolder.messageText.setText(c.getMessage());
@@ -106,12 +110,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 viewHolder.messageImage.setVisibility(View.INVISIBLE);
                 viewHolder.messageText.setVisibility(View.INVISIBLE);
                 viewHolder.messageVoice.setVisibility(View.VISIBLE);
+                viewHolder.messageVoice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        play_sound(v);
+                    }
+                });
         }
         else if( message_type.equals("image")) {
 
             viewHolder.messageText.setVisibility(View.INVISIBLE);
             viewHolder.messageVoice.setVisibility(View.INVISIBLE);
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(viewHolder.messageImage);
+
 
         }
 
@@ -121,12 +132,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     @Override
     public int getItemCount() {
+
         return mMessageList.size();
     }
 
     private void play_sound(View v){
 
-        String url ="https://firebasestorage.googleapis.com/v0/b/heychat-b328f.appspot.com/o/voice_message%2F-LR8jWg9ruoDBx7RmDKt.3gp?alt=media&token=c7019d89-e195-4a60-a259-285bff12e10b"; // your URL here
+        String url = voice;
         final MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try{

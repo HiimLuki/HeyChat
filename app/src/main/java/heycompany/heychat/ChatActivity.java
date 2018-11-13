@@ -151,6 +151,9 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessagesList.setAdapter(mAdapter);
 
+        mLinearLayout.setStackFromEnd(true);
+        //mMessagesList.scrollToPosition(messagesList.size() - 1);
+
         //Image
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
