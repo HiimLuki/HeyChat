@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginBtn;
 
     private Button button2;
+
+    private TextView message;
 
     //Toolbar oben initialisieren
     private android.support.v7.widget.Toolbar mToolbar;
@@ -63,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginPasswort = (TextInputLayout) findViewById(R.id.log_password);
         mLoginBtn = (Button) findViewById(R.id.log_btn);
 
+        message = (TextView) findViewById(R.id.message);
+
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,13 +75,16 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mLoginEmail.getEditText().getText().toString();
                 String password = mLoginPasswort.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     mLoginProgress.setTitle("Logging In");
                     mLoginProgress.setMessage("Please wait while we check your Information");
                     mLoginProgress.setCanceledOnTouchOutside(false);
                     mLoginProgress.show();
                     loginUser(email, password);
+                }
+                else{
+                    message.setText("Please fill in both fields");
                 }
             }
         });

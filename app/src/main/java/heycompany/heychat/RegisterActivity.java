@@ -7,8 +7,10 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +32,9 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout mPasswort;
     private Button mCreateBtn;
     private Button mAccount;
+
+    //Output
+    private TextView message;
 
     //Firebase auth
     private FirebaseAuth mAuth;
@@ -62,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswort = (TextInputLayout) findViewById(R.id.reg_password);
         mCreateBtn = (Button) findViewById(R.id.reg_create_btn);
         mAccount = (Button) findViewById(R.id.reg_account);
+        message = (TextView) findViewById(R.id.message);
 
         mAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,14 +85,24 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPasswort.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(display_name) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(display_name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-                    mRegProgress.setTitle("Registering User");
-                    mRegProgress.setMessage("Please wait while we create your Account!");
-                    mRegProgress.setCanceledOnTouchOutside(false);
-                    mRegProgress.show();
+                    if(password.length() >= 6) {
 
-                    registerUser(display_name,email,password);
+                        mRegProgress.setTitle("Registering User");
+                        mRegProgress.setMessage("Please wait while we create your Account!");
+                        mRegProgress.setCanceledOnTouchOutside(false);
+                        mRegProgress.show();
+
+                        registerUser(display_name, email, password);
+                    }
+                    else{
+                        message.setText("The password must contains at least 6 Characters");
+
+                    }
+                }
+                else{
+                    message.setText("Please fill in all fields");
                 }
             }
         });
@@ -133,6 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     mRegProgress.hide();
                     Toast.makeText(RegisterActivity.this, "Cannot Sign in. Please check form or internet connection and try again.", Toast.LENGTH_LONG).show();
+
                 }
             }
         });
