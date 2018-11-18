@@ -52,8 +52,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button mStatusBtn;
     private Button mImageBtn;
+    private Button mPinBtn;
 
     private static final int GALLERY_PICK = 1;
+
+    //User Data
+    private String privatePin;
+    private String name;
+    private String image;
+    private String status;
 
     //Online Status
     private DatabaseReference mUserRef;
@@ -96,13 +103,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
         mImageBtn = (Button) findViewById(R.id.settings_image_btn);
-
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mPinBtn = (Button) findViewById(R.id.settings_privatePin_btn);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
+
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String current_uid = mCurrentUser.getUid();
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+
         mUserDatabase.keepSynced(true);
 
         //OnlineStatus
@@ -115,10 +124,11 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-               String name = dataSnapshot.child("name").getValue().toString();
-               String image = dataSnapshot.child("image").getValue().toString();
-               String status = dataSnapshot.child("status").getValue().toString();
-               final String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
+                name = dataSnapshot.child("name").getValue().toString();
+                image = dataSnapshot.child("image").getValue().toString();
+                status = dataSnapshot.child("status").getValue().toString();
+                privatePin = dataSnapshot.child("privatePin").getValue().toString();
+                final String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                mName.setText(name);
                mStatus.setText(status);
@@ -168,6 +178,16 @@ public class SettingsActivity extends AppCompatActivity {
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
+            }
+        });
+
+        mPinBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent pinIntent = new Intent(SettingsActivity.this, PinActivity.class);
+                pinIntent.putExtra("privatePin", privatePin);
+                startActivity(pinIntent);
             }
         });
     }

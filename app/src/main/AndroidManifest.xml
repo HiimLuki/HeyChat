@@ -52,9 +52,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChatActivity"
+        <activity
+            android:name=".ChatActivity"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".PinActivity"
+            android:parentActivityName=".SettingsActivity" />
+        <activity android:name=".PrivateLoginActivity"></activity>
     </application>
 
 </manifest>

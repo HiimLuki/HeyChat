@@ -128,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userMap.put("image", "default");
                     userMap.put("thumb_image", "default");
                     userMap.put("device_token", deviceToken);
+                    userMap.put("privatePin", "no");
 
                     mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -141,6 +142,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 startActivity(mainIntent);
                                 finish();
 
+                            }
+                            else{
+                                Toast.makeText(RegisterActivity.this, "nur wegen dem dummen pin", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

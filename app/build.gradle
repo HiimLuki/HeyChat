@@ -72,7 +72,6 @@ dependencies {
     implementation 'me.spark:submitbutton:1.0.1'
 
 
-
 }
 
 apply plugin: 'com.google.gms.google-services'

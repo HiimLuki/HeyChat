@@ -49,7 +49,7 @@ public class StatusActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Account Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String status_value = getIntent().getStringExtra("status_value");
+        final String status_value = getIntent().getStringExtra("status_value");
 
         mStatus = (TextInputLayout) findViewById(R.id.status_input);
         mSavebtn = (Button) findViewById(R.id.status_save_btn);
@@ -59,25 +59,31 @@ public class StatusActivity extends AppCompatActivity {
         mSavebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //Progress
-                mProgress = new ProgressDialog(StatusActivity.this);
-                mProgress.setTitle("Saving Changes");
-                mProgress.setMessage("Wait until changes have been saved");
-                mProgress.show();
-
                 String status = mStatus.getEditText().getText().toString();
 
-                mStatusDatabase.child("status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            mProgress.dismiss();
-                        }else{
-                            Toast.makeText(StatusActivity.this, "There were some errors while saving", Toast.LENGTH_LONG).show();
+                if(!(status.equals(status_value))) {
+
+                    //Progress
+                    mProgress = new ProgressDialog(StatusActivity.this);
+                    mProgress.setTitle("Saving Changes");
+                    mProgress.setMessage("Wait until changes have been saved");
+                    mProgress.show();
+
+
+                    mStatusDatabase.child("status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                mProgress.dismiss();
+                            } else {
+                                Toast.makeText(StatusActivity.this, "There were some errors while saving", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                else{
+                    Toast.makeText(StatusActivity.this, "There are no changes to safe", Toast.LENGTH_LONG).show();
+                }
 
             }
         });

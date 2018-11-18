@@ -63,4 +63,18 @@
         android:text="Change Status"
         android:textColor="@android:color/white" />
 
+    <Button
+        android:id="@+id/settings_privatePin_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="196dp"
+        android:backgroundTint="@color/white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="set private pin "
+        android:textColor="@color/black" />
+
+
 </RelativeLayout>
