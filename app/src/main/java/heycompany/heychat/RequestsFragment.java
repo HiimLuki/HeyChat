@@ -32,9 +32,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class RequestsFragment extends Fragment {
 
-    private RecyclerView mFriendsList;
+    private RecyclerView mRequestList;
 
-    private DatabaseReference mFriendsDatabase;
+    private DatabaseReference mRequestDatabase;
     private DatabaseReference mUsersDatabase;
 
     private FirebaseAuth mAuth;
@@ -54,19 +54,19 @@ public class RequestsFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        mFriendsList = (RecyclerView) mMainView.findViewById(R.id.friends_list);
+        mRequestList = (RecyclerView) mMainView.findViewById(R.id.friends_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
-        mFriendsDatabase.keepSynced(true);
+        mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
+        mRequestDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mUsersDatabase.keepSynced(true);
 
 
-        mFriendsList.setHasFixedSize(true);
-        mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRequestList.setHasFixedSize(true);
+        mRequestList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Inflate the layout for this fragment
         return mMainView;
@@ -81,7 +81,7 @@ public class RequestsFragment extends Fragment {
                 Friends.class,
                 R.layout.users_single_layout,
                 FriendsFragment.FriendsViewHolder.class,
-                mFriendsDatabase
+                mRequestDatabase
 
 
         ) {
@@ -160,7 +160,7 @@ public class RequestsFragment extends Fragment {
             }
         };
 
-        mFriendsList.setAdapter(friendsRecyclerViewAdapter);
+        mRequestList.setAdapter(friendsRecyclerViewAdapter);
 
 
     }
