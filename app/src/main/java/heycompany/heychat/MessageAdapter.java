@@ -55,7 +55,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         public TextView messageText;
         public TextView messageTextIch;
         public ImageView messageImage;
-        public ImageView messageVoice;
+        public Button messageVoice;
         public CircleImageView profileImage;
 
 
@@ -65,17 +65,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageText = (TextView) view.findViewById(R.id.message_text_layout);
             messageTextIch = (TextView) view.findViewById(R.id.message_text_layout);
             messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
-            messageVoice = (ImageView) view.findViewById(R.id.message_voice_layout);
-            messageVoice.setClickable(true);
+            messageVoice = (Button) view.findViewById(R.id.message_voice_layout);
 
-
-            messageVoice.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                }
-            });
         }
     }
 
@@ -84,10 +75,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         mAuth = FirebaseAuth.getInstance();
         String current_user_id = mAuth.getCurrentUser().getUid();
-        Messages c = mMessageList.get(i);
+        final Messages c = mMessageList.get(i);
         String from_user = c.getFrom();
         String message_type = c.getType();
-        voice = c.getMessage();
 
         if(from_user.equals(current_user_id)){
             viewHolder.messageTextIch.setBackgroundResource(R.drawable.message_text_backgroundich);
@@ -113,7 +103,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 viewHolder.messageVoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        play_sound(v);
+                        play_sound(v, c.getMessage());
                     }
                 });
         }
@@ -136,9 +126,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         return mMessageList.size();
     }
 
-    private void play_sound(View v){
+    private void play_sound(View v, String url){
 
-        String url = voice;
         final MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try{

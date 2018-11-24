@@ -32,9 +32,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class FriendsFragment extends Fragment {
 
-    private RecyclerView mFriendsList;
+    private RecyclerView mAnfragenList;
 
-    private DatabaseReference mFriendsDatabase;
+    private DatabaseReference mAnfragenDatabase;
     private DatabaseReference mUsersDatabase;
 
     private FirebaseAuth mAuth;
@@ -55,19 +55,19 @@ public class FriendsFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        mFriendsList = (RecyclerView) mMainView.findViewById(R.id.friends_list);
+        mAnfragenList = (RecyclerView) mMainView.findViewById(R.id.friends_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
-        mFriendsDatabase.keepSynced(true);
+        mAnfragenDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req").child(mCurrent_user_id);
+        mAnfragenDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mUsersDatabase.keepSynced(true);
 
 
-        mFriendsList.setHasFixedSize(true);
-        mFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAnfragenList.setHasFixedSize(true);
+        mAnfragenList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Inflate the layout for this fragment
         return mMainView;
@@ -83,7 +83,7 @@ public class FriendsFragment extends Fragment {
                 Friends.class,
                 R.layout.users_single_layout,
                 FriendsViewHolder.class,
-                mFriendsDatabase
+                mAnfragenDatabase
 
 
         ) {
@@ -114,39 +114,9 @@ public class FriendsFragment extends Fragment {
                         friendsViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
-                                CharSequence options[] = new CharSequence[]{"Open Profile", "Send message"};
-
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                                builder.setTitle("Select Options");
-                                builder.setItems(options, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        //Click Event for each item.
-                                        if(i == 0){
-
                                             Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
                                             profileIntent.putExtra("user_id", list_user_id);
                                             startActivity(profileIntent);
-
-                                        }
-
-                                        if(i == 1){
-
-                                            Intent chatIntent = new Intent(getContext(), ChatActivity.class);
-                                            chatIntent.putExtra("user_id", list_user_id);
-                                            chatIntent.putExtra("user_name", userName);
-                                            startActivity(chatIntent);
-
-                                        }
-
-                                    }
-                                });
-
-                                builder.show();
-
                             }
                         });
 
@@ -162,7 +132,7 @@ public class FriendsFragment extends Fragment {
             }
         };
 
-        mFriendsList.setAdapter(friendsRecyclerViewAdapter);
+        mAnfragenList.setAdapter(friendsRecyclerViewAdapter);
 
 
     }
