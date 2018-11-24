@@ -27,6 +27,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -110,7 +112,9 @@ public class ChatsFragment extends Fragment {
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                         String data = dataSnapshot.child("message").getValue().toString();
-                        convViewHolder.setMessage(data, conv.isSeen());
+                        String type = dataSnapshot.child("type").getValue().toString();
+
+                        convViewHolder.setMessage(data, type, conv.isSeen());
 
                     }
 
@@ -193,10 +197,20 @@ public class ChatsFragment extends Fragment {
 
         }
 
-        public void setMessage(String message, boolean isSeen){
+
+        public void setMessage(String message,String type, boolean isSeen){
 
             TextView userStatusView = (TextView) mView.findViewById(R.id.user_single_status);
-            userStatusView.setText(message);
+            if (type.equals("image")){
+                userStatusView.setText("Bild");
+            }
+            else if (type.equals("voice")){
+                userStatusView.setText("Sprachnachricht");
+            }
+            else{
+                userStatusView.setText(message);
+            }
+
 
             if(!isSeen){
                 userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);

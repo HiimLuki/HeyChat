@@ -30,8 +30,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private FirebaseAuth mAuth;
     private List<Messages> mMessageList;
 
-    public String voice;
-
     public MessageAdapter(List<Messages> mMessageList) {
 
         this.mMessageList = mMessageList;
@@ -104,6 +102,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     @Override
                     public void onClick(View v) {
                         play_sound(v, c.getMessage());
+
                     }
                 });
         }

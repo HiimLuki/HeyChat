@@ -77,15 +77,31 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/mRecordBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/messages_list"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="88dp"
-        android:background="@drawable/rounded_button"
-        android:text="Record" />
+    <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="270dp"
+        android:layout_marginTop="470dp"
+        app:rb_color="@color/red"
+        app:rb_duration="1000"
+        app:rb_radius="10dp"
+        app:rb_rippleAmount="4"
+        app:rb_scale="6">
+
+        <Button
+            android:id="@+id/mRecordBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="29dp"
+            android:background="@drawable/rounded_button"
+            android:text="Record" />
+    </com.skyfishjy.library.RippleBackground>
 
 </RelativeLayout>

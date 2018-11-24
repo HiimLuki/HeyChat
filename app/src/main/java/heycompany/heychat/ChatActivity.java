@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.skyfishjy.library.RippleBackground;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -260,17 +261,21 @@ public class ChatActivity extends AppCompatActivity {
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/recorded_audio.3gp";
 
+        final RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
+
         mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
 
                     startRecording();
+                    rippleBackground.startRippleAnimation();
 
                 }else if (event.getAction() == MotionEvent.ACTION_UP){
 
                     stopRecording();
                     uploadAudio();
+                    rippleBackground.stopRippleAnimation();
 
                 }
                 return false;
