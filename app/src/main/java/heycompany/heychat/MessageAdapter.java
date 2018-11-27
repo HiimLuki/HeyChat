@@ -3,13 +3,18 @@ package heycompany.heychat;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         public TextView messageTextIch;
         public ImageView messageImage;
         public Button messageVoice;
+        public VideoView messageVideo;
         public CircleImageView profileImage;
 
 
@@ -64,6 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageTextIch = (TextView) view.findViewById(R.id.message_text_layout);
             messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
             messageVoice = (Button) view.findViewById(R.id.message_voice_layout);
+            messageVideo = (VideoView) view.findViewById(R.id.VideoView);
 
         }
     }
@@ -93,11 +100,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             viewHolder.messageText.setText(c.getMessage());
             viewHolder.messageImage.setVisibility(View.INVISIBLE);
             viewHolder.messageVoice.setVisibility(View.INVISIBLE);
+            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
         }
         else if (message_type.equals("voice")){
                 viewHolder.messageImage.setVisibility(View.INVISIBLE);
                 viewHolder.messageText.setVisibility(View.INVISIBLE);
                 viewHolder.messageVoice.setVisibility(View.VISIBLE);
+            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
                 viewHolder.messageVoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -110,8 +119,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
             viewHolder.messageText.setVisibility(View.INVISIBLE);
             viewHolder.messageVoice.setVisibility(View.INVISIBLE);
+            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(viewHolder.messageImage);
 
+        }
+        else if( message_type.equals("video")) {
+
+            viewHolder.messageText.setVisibility(View.INVISIBLE);
+            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
+            viewHolder.messageVideo.setVisibility(View.VISIBLE);
+            viewHolder.messageVideo.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    play_video(v, c.getMessage());
+                    return false;
+                }
+            });
 
         }
 
@@ -142,6 +165,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         catch (IOException e){
             e.printStackTrace();
         }
+    }
+    private void play_video(View v, String url){
+
+        VideoView videoView = (VideoView)v.findViewById(R.id.VideoView);
+        //MediaController mediaController= new MediaController(this);
+        //mediaController.setAnchorView(videoView);
+        //Uri uri=Uri.parse("rtsp://r2---sn-5hnekn7s.googlevideo.com/Cj0LENy73wIaNAlkloBQ6zhM9BMYDSANFC3hp_1bMOCoAUIASARg9v247KDv6eFZigELYUUtT2dxaG5EMnMM/DF798CD202779002371993871819FE595DDC140B.87F309B2D9F004DCF34561DB660C7FDD6C5934BF/yt6/1/video.3gp");
+        Uri uri=Uri.parse(url);
+        //videoView.setMediaController(mediaController);
+        videoView.setVideoURI(uri);
+        videoView.requestFocus();
+        videoView.setZOrderOnTop(false);
+
+        videoView.start();
+
     }
 
 }

@@ -207,6 +207,9 @@ public class ChatsFragment extends Fragment {
             else if (type.equals("voice")){
                 userStatusView.setText("Sprachnachricht");
             }
+            else if (type.equals("video")){
+                userStatusView.setText("Video");
+            }
             else{
                 userStatusView.setText(message);
             }

@@ -32,8 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mLoginPasswort;
     private Button mLoginBtn;
 
-    private Button button2;
-
     private TextView message;
 
     //Toolbar oben initialisieren
@@ -55,8 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Login");
-
-        button2 = (Button) findViewById(R.id.button2);
 
         mLoginProgress = new ProgressDialog(this);
 
@@ -86,13 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     message.setText("Please fill in both fields");
                 }
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                play_sound(v);
             }
         });
 

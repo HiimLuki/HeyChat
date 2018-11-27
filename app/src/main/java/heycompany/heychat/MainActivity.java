@@ -117,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(UsersIntent);
 
         }
+        if(item.getItemId() == R.id.groups_btn){
+
+            Intent GroupIntent = new Intent(MainActivity.this, CreateGroupActivity.class);
+            startActivity(GroupIntent);
+
+        }
         return true;
     }
 }

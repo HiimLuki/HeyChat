@@ -26,7 +26,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bhargavms.dotloader.DotLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -81,11 +83,12 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayoutManager mLinearLayout;
     private MessageAdapter mAdapter;
 
-    private static final int GALLERY_PICK = 1;
+    //private static final int GALLERY_PICK = 1;
 
     //Storage
     private StorageReference mImageStorage;
     private StorageReference mAudioStorage;
+    private StorageReference mVideoStorage;
 
     //Online Status
     private DatabaseReference mUserRef;
@@ -100,10 +103,17 @@ public class ChatActivity extends AppCompatActivity {
     private String mFileName = null;
     private static final String LOG_TAG = "Record_log";
 
+    private static final int SELECT_PICTURE = 1;
+    private static final int SELECT_VIDEO = 2;
+
+    //Video
+    private Button Video_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
 
         mChatToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.chat_app_bar);
         setSupportActionBar(mChatToolbar);
@@ -172,6 +182,9 @@ public class ChatActivity extends AppCompatActivity {
 
         //Audio
         mAudioStorage = FirebaseStorage.getInstance().getReference();
+
+        //Video
+        Video_btn = (Button) findViewById(R.id.chat_video);
 
 
         mRootRef.child("Users").child(mChatUser).addValueEventListener(new ValueEventListener() {
@@ -252,7 +265,19 @@ public class ChatActivity extends AppCompatActivity {
                 galleryIntent.setType("image/*");
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), GALLERY_PICK);
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), SELECT_PICTURE);
+            }
+        });
+
+        Video_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("video/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), SELECT_VIDEO);
             }
         });
 
@@ -288,7 +313,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
+        if(requestCode == SELECT_PICTURE && resultCode == RESULT_OK){
 
             Uri imageUri = data.getData();
 
@@ -314,6 +339,59 @@ public class ChatActivity extends AppCompatActivity {
                         messageMap.put("message", download_url);
                         messageMap.put("seen", false);
                         messageMap.put("type", "image");
+                        messageMap.put("time", ServerValue.TIMESTAMP);
+                        messageMap.put("from", mCurrentUserID);
+
+                        Map messageUserMap = new HashMap();
+                        messageUserMap.put(current_user_ref + "/" + push_id, messageMap);
+                        messageUserMap.put(chat_user_ref + "/" + push_id, messageMap);
+
+                        mChatMessageView.setText("");
+
+                        mRootRef.updateChildren(messageUserMap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                                if(databaseError != null){
+
+                                    Log.d("CHAT_LOG", databaseError.getMessage().toString());
+
+                                }
+
+                            }
+                        });
+
+                    }
+                }
+            });
+
+        }
+        if(requestCode == SELECT_VIDEO && resultCode == RESULT_OK){
+
+            Uri videoUri = data.getData();
+
+            final String current_user_ref = "messages/" + mCurrentUserID + "/" + mChatUser;
+            final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserID;
+
+            DatabaseReference user_message_push = mRootRef.child("messages")
+                    .child(mCurrentUserID).child(mChatUser).push();
+
+            final String push_id = user_message_push.getKey();
+
+
+            StorageReference filepath = mImageStorage.child("video_message").child( push_id + ".3gp");
+
+            filepath.putFile(videoUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if(task.isSuccessful()){
+
+                        String download_url = task.getResult().getDownloadUrl().toString();
+
+                        Map messageMap = new HashMap();
+                        messageMap.put("message", download_url);
+                        messageMap.put("seen", false);
+                        messageMap.put("type", "video");
                         messageMap.put("time", ServerValue.TIMESTAMP);
                         messageMap.put("from", mCurrentUserID);
 
@@ -538,6 +616,5 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }

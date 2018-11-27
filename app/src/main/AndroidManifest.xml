@@ -31,12 +31,12 @@
         <activity android:name=".StartActivity" />
         <activity
             android:name=".RegisterActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".StartActivity" />
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".StartActivity" />
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".StatusActivity"
@@ -61,9 +61,10 @@
         <activity
             android:name=".PinActivity"
             android:parentActivityName=".SettingsActivity" />
-        <activity android:name=".PrivateLoginActivity"></activity>
-
-
+        <activity android:name=".PrivateLoginActivity" />
+        <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".AddToGroupActivity" />
+        <activity android:name=".GroupChatActivity"></activity>
     </application>
 
 </manifest>
