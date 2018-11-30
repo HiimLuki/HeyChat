@@ -64,7 +64,8 @@
         <activity android:name=".PrivateLoginActivity" />
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".AddToGroupActivity" />
-        <activity android:name=".GroupChatActivity"></activity>
+        <activity android:name=".GroupChatActivity" />
+        <activity android:name=".sidebarActivity"></activity>
     </application>
 
 </manifest>

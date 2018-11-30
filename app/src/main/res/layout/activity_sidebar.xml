@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".sidebarActivity">
+
+    <Button
+        android:id="@+id/logout_btn"
+        android:layout_width="158dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="65dp"
+        android:layout_marginStart="70dp"
+        android:background="@drawable/logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/chat_btn"
+        android:layout_width="115.64dp"
+        android:layout_height="56.57dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="180dp"
+        android:background="@drawable/chats"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/privatechat_btn"
+        android:layout_width="172.36dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/privatechats"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chat_btn" />
+
+    <Button
+        android:id="@+id/achievments_btn"
+        android:layout_width="170.36dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/achievments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privatechat_btn" />
+</android.support.constraint.ConstraintLayout>

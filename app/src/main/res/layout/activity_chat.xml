@@ -31,7 +31,7 @@
 
     <include
         android:id="@+id/chat_app_bar"
-        layout="@layout/app_bar_layout" />
+        layout="@layout/bar" />
 
     <com.bhargavms.dotloader.DotLoader
         android:id="@+id/dot_loader"

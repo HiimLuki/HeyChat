@@ -1,12 +1,15 @@
 package heycompany.heychat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,13 +34,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Leiste unsichtbar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
 
-       mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.main_page_toolbar);
+       mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+       mToolbar.setTitle("Chats");
+       mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
        setSupportActionBar(mToolbar);
-       getSupportActionBar().setTitle("HeyChat");
+
+        new SlidingRootNavBuilder(this)
+                .withToolbarMenuToggle(mToolbar)
+                .withDragDistance(260)
+                .withRootViewScale(0.82f)
+                .withMenuOpened(false)
+                .withMenuLayout(R.layout.activity_sidebar)
+                .withContentClickableWhenMenuOpened(false)
+                .inject();
 
         if(mAuth.getCurrentUser()!=null) {
             mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
