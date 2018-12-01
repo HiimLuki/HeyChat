@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .withRootViewScale(0.82f)
                 .withMenuOpened(false)
                 .withMenuLayout(R.layout.activity_sidebar)
-                .withContentClickableWhenMenuOpened(false)
+                .withContentClickableWhenMenuOpened(true)
                 .inject();
 
         if(mAuth.getCurrentUser()!=null) {

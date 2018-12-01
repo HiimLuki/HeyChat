@@ -98,6 +98,9 @@ public class ProfileActivity extends AppCompatActivity {
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
+
+
         mNotificationDatabase = FirebaseDatabase.getInstance().getReference().child("notifications");
         mCurrent_user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -377,6 +380,17 @@ public class ProfileActivity extends AppCompatActivity {
                     unfriendMap.put("Friends/" + mCurrent_user.getUid() + "/" + user_id, null);
                     unfriendMap.put("Friends/" + user_id + "/" + mCurrent_user.getUid(), null);
 
+                    Map deleteChatMap = new HashMap();
+                    deleteChatMap.put("Chat/" + mCurrent_user.getUid() + "/" + user_id, null);
+                    deleteChatMap.put("Chat/" + user_id + "/" + mCurrent_user.getUid(), null);
+
+                    Map deleteMessageMap = new HashMap();
+                    deleteMessageMap.put("messages/" + mCurrent_user.getUid() + "/" + user_id, null);
+                    deleteMessageMap.put("messages/" + user_id + "/" + mCurrent_user.getUid(), null);
+
+                    mRootRef.updateChildren(deleteChatMap);
+                    mRootRef.updateChildren(deleteMessageMap);
+
                     mRootRef.updateChildren(unfriendMap, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -409,7 +423,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-    }
 
+
+    }
 
 }

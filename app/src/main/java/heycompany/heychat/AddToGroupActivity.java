@@ -112,10 +112,9 @@ public class AddToGroupActivity extends AppCompatActivity {
 
                         Intent intent = getIntent();
                         String group = intent.getStringExtra("groupname");
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(group).child("member").child(user_id);
-
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id).child("member").child(user_id);
                         HashMap<String, String> userMap = new HashMap<>();
-                        userMap.put("rank", "user");
+                        userMap.put("seen", "false");
 
                         mDatabase.setValue(userMap);
 

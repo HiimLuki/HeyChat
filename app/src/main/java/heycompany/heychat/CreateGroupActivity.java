@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class CreateGroupActivity extends AppCompatActivity {
 
@@ -22,7 +23,8 @@ public class CreateGroupActivity extends AppCompatActivity {
     private Button add_Btn;
 
     //Firebase
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseInfo;
+    private DatabaseReference mDatabaseMember;
     private FirebaseUser mCurrentUser;
 
     @Override
@@ -65,13 +67,27 @@ public class CreateGroupActivity extends AppCompatActivity {
 
     private void CreateNewGroup(String group, String current_uid) {
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(group).child("member").child(current_uid);
+        /*Random rand = new Random();
+        int a = rand.nextInt(9);
+        int b = rand.nextInt(9);
+        int c = rand.nextInt(9);
+        int d = rand.nextInt(9);
+        int e = rand.nextInt(9);
+        int f = rand.nextInt(9);
+        String random = String.valueOf(a) + String.valueOf(b) + String.valueOf(c) + String.valueOf(d) + String.valueOf(e) + String.valueOf(f);
+*/
+        mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child("groupinfo");
 
         HashMap<String, String> userMap = new HashMap<>();
-        userMap.put("rank", "admin");
+        userMap.put("name", group);
+        userMap.put("admin", current_uid);
+        mDatabaseInfo.setValue(userMap);
 
-        mDatabase.setValue(userMap);
-        //mDatabase.child("Groups").child(group).child("member").child(current_uid).setValue("admin");
+        mDatabaseMember = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child("member").child(current_uid);
+
+        HashMap<String, String> adminMap = new HashMap<>();
+        adminMap.put("seen", "false");
+        mDatabaseMember.setValue(adminMap);
     }
     private void AddToGroup(){
 
@@ -79,4 +95,5 @@ public class CreateGroupActivity extends AppCompatActivity {
     private void setImage(){
 
     }
+
 }
