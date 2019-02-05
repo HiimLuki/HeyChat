@@ -2,6 +2,8 @@ package heycompany.heychat;
 
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mUserRef;
 
     private TabLayout mTabLayout;
+
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,24 @@ public class MainActivity extends AppCompatActivity {
 
         mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        navigationView = (NavigationView) findViewById(R.id.navview);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.logout_drawer:
+                        Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();
+                        FirebaseAuth.getInstance().signOut();
+                        //mUserRef.child("online").setValue("false");
+                        sendToStart();
+                        break;
+                }
+                return false;
+            }
+        });
+
 
     }
 
