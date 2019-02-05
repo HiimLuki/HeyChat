@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
        mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
        setSupportActionBar(mToolbar);
 
+       //SlideMenu
         new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(mToolbar)
                 .withDragDistance(260)
@@ -70,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 .withMenuLayout(R.layout.activity_sidebar)
                 .withContentClickableWhenMenuOpened(true)
                 .inject();
+        //ChangeBurgerSymbol
+        //mToolbar.setNavigationIcon(R.drawable.burger);
+        //mToolbar.setNavigationIcon(R.drawable.burgermessage);
 
         if(mAuth.getCurrentUser()!=null) {
             mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(3);
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(1);
 
         mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -120,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 sendToStart();
             }
         });
-
-
-
     }
 
     @Override
