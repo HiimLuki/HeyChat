@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/chats_drawer"
+
+        android:title="Chats" />
+    <item android:id="@+id/privatechats_drawer"
+        android:title="Private Chats"/>
+
+    <item android:id="@+id/achievments_drawer"
+        android:title="Achievments"/>
+
+    <item android:id="@+id/logout_drawer"
+        android:title="Logout"/>
+
+    </group>
+</menu>
