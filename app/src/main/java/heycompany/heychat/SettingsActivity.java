@@ -156,6 +156,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Button btn = findViewById(R.id.button2);
+        //test
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent private_intent = new Intent(SettingsActivity.this, PrivateLoginActivity.class);
+                startActivity(private_intent);
+            }
+        });
+
         mStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

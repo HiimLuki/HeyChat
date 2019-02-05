@@ -66,6 +66,7 @@
         <activity android:name=".AddToGroupActivity" />
         <activity android:name=".GroupChatActivity" />
         <activity android:name=".sidebarActivity" />
+        <activity android:name=".PasswordResetActivity"></activity>
     </application>
 
 </manifest>

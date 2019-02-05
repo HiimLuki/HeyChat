@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mLoginEmail;
     private TextInputLayout mLoginPasswort;
     private Button mLoginBtn;
+    private Button resetPwBtn;
 
     private TextView message;
 
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginEmail = (TextInputLayout) findViewById(R.id.log_email);
         mLoginPasswort = (TextInputLayout) findViewById(R.id.log_password);
         mLoginBtn = (Button) findViewById(R.id.log_btn);
+        resetPwBtn = (Button) findViewById(R.id.pwForget);
 
         message = (TextView) findViewById(R.id.message);
 
@@ -93,6 +95,15 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     message.setText("Please fill in both fields");
                 }
+            }
+        });
+
+        resetPwBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this,PasswordResetActivity.class);
+                startActivity(intent);
+
             }
         });
 
