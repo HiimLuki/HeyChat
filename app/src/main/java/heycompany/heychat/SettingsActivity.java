@@ -4,10 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button mStatusBtn;
     private Button mImageBtn;
     private Button mPinBtn;
+    private Button closeBtn;
 
     private static final int GALLERY_PICK = 1;
 
@@ -95,6 +99,14 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Leiste unsichtbar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+
         setContentView(R.layout.activity_settings);
 
         mDisplayImage = (CircleImageView) findViewById(R.id.settings_image);
@@ -104,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
         mStatusBtn = (Button) findViewById(R.id.settings_status_btn);
         mImageBtn = (Button) findViewById(R.id.settings_image_btn);
         mPinBtn = (Button) findViewById(R.id.settings_privatePin_btn);
+        closeBtn = (Button) findViewById(R.id.close_Btn);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -190,6 +203,17 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(pinIntent);
             }
         });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent closeIntent = new Intent(SettingsActivity.this, MainActivity.class);
+                startActivity(closeIntent);
+            }
+        });
+
+
     }
 
     @Override
