@@ -68,7 +68,7 @@ public class ChatsFragment extends Fragment {
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
+        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chats").child(mCurrent_user_id);
 
         mConvDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -102,7 +102,6 @@ public class ChatsFragment extends Fragment {
         ) {
             @Override
             protected void populateViewHolder(final ConvViewHolder convViewHolder, final Chat conv, int i) {
-
 
 
                 final String list_user_id = getRef(i).getKey();

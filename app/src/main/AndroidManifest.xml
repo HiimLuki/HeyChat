@@ -65,7 +65,7 @@
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".AddToGroupActivity" />
         <activity android:name=".GroupChatActivity" />
-        <activity android:name=".sidebarActivity"></activity>
+        <activity android:name=".sidebarActivity" />
     </application>
 
 </manifest>
