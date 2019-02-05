@@ -7,13 +7,6 @@
     android:background="@drawable/background"
     tools:context=".sidebarActivity">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background"
-        app:menu="@menu/drawer_menu" />
-
     <Button
         android:id="@+id/logout_btn"
         android:layout_width="158dp"

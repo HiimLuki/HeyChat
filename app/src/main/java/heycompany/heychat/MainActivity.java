@@ -10,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -34,7 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout mTabLayout;
 
-    NavigationView navigationView;
+    //Buttons for Left Drawer
+    Button logoutBtn;
+    Button ChatsBtn;
+    Button PrivBtn;
+    Button AchievmentsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +86,41 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        navigationView = (NavigationView) findViewById(R.id.navview);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-
+        //Buttons for the LeftDrawer
+        ChatsBtn = (Button) findViewById(R.id.chat_btn);
+        ChatsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.logout_drawer:
-                        Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_LONG).show();
-                        FirebaseAuth.getInstance().signOut();
-                        //mUserRef.child("online").setValue("false");
-                        sendToStart();
-                        break;
-                }
-                return false;
+            public void onClick(View v) {
+
             }
         });
+
+        PrivBtn = (Button) findViewById(R.id.privatechat_btn);
+        PrivBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        AchievmentsBtn = (Button) findViewById(R.id.achievments_btn);
+        AchievmentsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        logoutBtn = (Button) findViewById(R.id.logout_btn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                //mUserRef.child("online").setValue("false");
+                sendToStart();
+            }
+        });
+
 
 
     }
