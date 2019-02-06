@@ -1,7 +1,9 @@
 package heycompany.heychat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.Image;
 import android.media.MediaPlayer;
@@ -11,6 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -112,6 +115,11 @@ public class ChatActivity extends AppCompatActivity {
 
     //Video
     private Button Video_btn;
+
+    //Permission
+    int REQ_CODE_RECORD_AUDIO = 45;
+    int REQ_CODE_WRITE_STORAGE = 44;
+    int REQ_CODE_READ_STORAGE = 43;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,17 +311,32 @@ public class ChatActivity extends AppCompatActivity {
         mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                    startRecording();
-                    rippleBackground.startRippleAnimation();
+                if(ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-                }else if (event.getAction() == MotionEvent.ACTION_UP){
+                                startRecording();
+                                rippleBackground.startRippleAnimation();
 
-                    stopRecording();
-                    uploadAudio();
-                    rippleBackground.stopRippleAnimation();
+                            } else if (event.getAction() == MotionEvent.ACTION_UP) {
 
+                                stopRecording();
+                                uploadAudio();
+                                rippleBackground.stopRippleAnimation();
+
+                            }
+                            return false;
+                        } else {
+                            ActivityCompat.requestPermissions(ChatActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQ_CODE_WRITE_STORAGE);
+                        }
+                    } else {
+                        ActivityCompat.requestPermissions(ChatActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_CODE_READ_STORAGE);
+                    }
+                }
+                else{
+                    ActivityCompat.requestPermissions(ChatActivity.this,new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_RECORD_AUDIO);
                 }
                 return false;
             }
@@ -629,4 +652,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, @android.support.annotation.NonNull String[] permissions, @android.support.annotation.NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == REQ_CODE_RECORD_AUDIO && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+        }
+    }*/
 }

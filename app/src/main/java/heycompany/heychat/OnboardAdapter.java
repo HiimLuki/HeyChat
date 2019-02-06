@@ -30,16 +30,16 @@ public class OnboardAdapter extends PagerAdapter {
 
     public String[] slide_headings = {
 
-            "CONVERSATIONS",
-            "FRIENDS",
-            "MOMENTS"
+            "KONVERSATIONEN",
+            "FREUNDE",
+            "MOMENTE"
     };
 
     public String[] slide_descs = {
 
-            "Lorem ipsum dolor sit amet",
-            "Lorem ipsum dolor sit amet",
-            "Lorem ipsum dolor sit amet"
+            "Beginne Gespräche und habe spannende Konversationen",
+            "Finde neue Freunde auf der ganzen Welt, oder schreibe doch einfach deinen Alten",
+            "Teile deine bezaubernsten Momente mit deinen Freunden"
     };
 
     @Override
