@@ -67,6 +67,7 @@
         <activity android:name=".GroupChatActivity" />
         <activity android:name=".sidebarActivity" />
         <activity android:name=".PasswordResetActivity"></activity>
+        <activity android:name=".Onboarding" />
     </application>
 
 </manifest>

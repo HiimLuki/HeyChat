@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         PrivBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
 
             }
         });
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         AchievmentsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent OnboardIntent = new Intent(MainActivity.this,Onboarding.class);
+                startActivity(OnboardIntent);
+                finish();
 
             }
         });
