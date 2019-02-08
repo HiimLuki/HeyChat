@@ -135,6 +135,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
 
+        //Add Toolbar on Top
         mChatToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mChatToolbar);
 
@@ -155,7 +156,8 @@ public class ChatActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(null);
 
-        LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //Inflater for Chats
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = inflater.inflate(R.layout.chat_custom_bar, null);
 
         actionBar.setCustomView(action_bar_view);
@@ -174,7 +176,7 @@ public class ChatActivity extends AppCompatActivity {
 
         mAdapter = new MessageAdapter(messagesList);
 
-        mMessagesList = (RecyclerView)findViewById(R.id.messages_list);
+        mMessagesList = (RecyclerView) findViewById(R.id.messages_list);
         mLinearLayout = new LinearLayoutManager(this);
 
         mMessagesList.setHasFixedSize(true);
@@ -189,7 +191,7 @@ public class ChatActivity extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
         mRootRef.child("Chat").child(mCurrentUserID).child(mChatUser).child("seen").setValue(true);
-        
+
         loadMessages();
 
         mTitleView.setText(userName);
@@ -207,6 +209,7 @@ public class ChatActivity extends AppCompatActivity {
         Video_btn = (Button) findViewById(R.id.chat_video);
 
 
+        //Add Listener, wenn sich in User-Branch etwas ändert dann werden Daten in der App geupdated
         mRootRef.child("Users").child(mChatUser).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -214,9 +217,9 @@ public class ChatActivity extends AppCompatActivity {
                 String online = dataSnapshot.child("online").getValue().toString();
                 String image = dataSnapshot.child("thumb_image").getValue().toString();
 
-                if(online.equals("true")){
+                if (online.equals("true")) {
                     mLastSeenView.setText("Online");
-                }else{
+                } else {
 
                     GetTimeAgo getTimeAgo = new GetTimeAgo();
 
@@ -235,11 +238,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Add Listener, wenn sich in Chat-Branch etwas ändert dann werden Daten in der App geupdated
         mRootRef.child("Chat").child(mCurrentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(!dataSnapshot.hasChild(mChatUser)){
+                if (!dataSnapshot.hasChild(mChatUser)) {
 
                     Map chatAddMap = new HashMap();
                     chatAddMap.put("seen", false);
@@ -253,7 +257,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                            if(databaseError != null){
+                            if (databaseError != null) {
 
                                 Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -269,6 +273,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Onclick für den Sendenachricht Button
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +282,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Onclick für Images verschicken, Öffnet Gallery
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -289,6 +295,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Onclick für Videos verschicken, öffnet Gallery
         Video_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -306,13 +313,14 @@ public class ChatActivity extends AppCompatActivity {
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/recorded_audio.3gp";
 
-        final RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
+        final RippleBackground rippleBackground = (RippleBackground) findViewById(R.id.content);
 
+        //Erst Abfrage nach Permissions, dann bei Ontouch Mikrofon aufnehmen und Rippleeffekt starten
         mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -334,9 +342,8 @@ public class ChatActivity extends AppCompatActivity {
                     } else {
                         ActivityCompat.requestPermissions(ChatActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQ_CODE_READ_STORAGE);
                     }
-                }
-                else{
-                    ActivityCompat.requestPermissions(ChatActivity.this,new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_RECORD_AUDIO);
+                } else {
+                    ActivityCompat.requestPermissions(ChatActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_RECORD_AUDIO);
                 }
                 return false;
             }
@@ -344,11 +351,12 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    //Wenn Bild ausgewählt, Speichern der Nachricht in der Datenbank mit Image Uri, bildtyp, time, von wem und speichern in einer Hashmap
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == SELECT_PICTURE && resultCode == RESULT_OK){
+        if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {
 
             Uri imageUri = data.getData();
 
@@ -361,12 +369,12 @@ public class ChatActivity extends AppCompatActivity {
             final String push_id = user_message_push.getKey();
 
 
-            StorageReference filepath = mImageStorage.child("message_images").child( push_id + ".jpg");
+            StorageReference filepath = mImageStorage.child("message_images").child(push_id + ".jpg");
 
             filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
 
                         String download_url = task.getResult().getDownloadUrl().toString();
 
@@ -387,7 +395,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                                if(databaseError != null){
+                                if (databaseError != null) {
 
                                     Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -401,7 +409,7 @@ public class ChatActivity extends AppCompatActivity {
             });
 
         }
-        if(requestCode == SELECT_VIDEO && resultCode == RESULT_OK){
+        if (requestCode == SELECT_VIDEO && resultCode == RESULT_OK) {
 
             Uri videoUri = data.getData();
 
@@ -414,12 +422,12 @@ public class ChatActivity extends AppCompatActivity {
             final String push_id = user_message_push.getKey();
 
 
-            StorageReference filepath = mImageStorage.child("video_message").child( push_id + ".3gp");
+            StorageReference filepath = mImageStorage.child("video_message").child(push_id + ".3gp");
 
             filepath.putFile(videoUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
 
                         String download_url = task.getResult().getDownloadUrl().toString();
 
@@ -440,7 +448,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                                if(databaseError != null){
+                                if (databaseError != null) {
 
                                     Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -491,10 +499,10 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(){
+    private void sendMessage() {
 
         String message = mChatMessageView.getText().toString();
-        if(!TextUtils.isEmpty(message)){
+        if (!TextUtils.isEmpty(message)) {
 
             String current_user_ref = "messages/" + mCurrentUserID + "/" + mChatUser;
             String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserID;
@@ -521,7 +529,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                    if(databaseError != null){
+                    if (databaseError != null) {
 
                         Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -538,7 +546,7 @@ public class ChatActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser != null){
+        if (currentUser != null) {
             mUserRef.child("online").setValue("true");
         }
     }
@@ -548,7 +556,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onPause();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             mUserRef.child("online").setValue("false");
         }
     }
@@ -563,10 +571,9 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String nachricht = mChatMessageView.getText().toString().trim();
-            if(!nachricht.isEmpty()){
+            if (!nachricht.isEmpty()) {
                 dotloader.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 dotloader.setVisibility(View.INVISIBLE);
             }
         }
@@ -599,7 +606,7 @@ public class ChatActivity extends AppCompatActivity {
         mRecorder = null;
     }
 
-    private void uploadAudio(){
+    private void uploadAudio() {
 
         DatabaseReference user_message_push = mRootRef.child("messages")
                 .child(mCurrentUserID).child(mChatUser).push();
@@ -608,16 +615,15 @@ public class ChatActivity extends AppCompatActivity {
 
         final String push_id = user_message_push.getKey();
 
-        StorageReference filepath = mAudioStorage.child("voice_message").child(push_id +".3gp");
+        StorageReference filepath = mAudioStorage.child("voice_message").child(push_id + ".3gp");
 
         Uri uri = Uri.fromFile(new File(mFileName));
-
 
 
         filepath.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@android.support.annotation.NonNull Task<UploadTask.TaskSnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
 
                     String download_url = task.getResult().getDownloadUrl().toString();
 
@@ -638,7 +644,7 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
-                            if(databaseError != null){
+                            if (databaseError != null) {
 
                                 Log.d("CHAT_LOG", databaseError.getMessage().toString());
 
@@ -651,13 +657,4 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @android.support.annotation.NonNull String[] permissions, @android.support.annotation.NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if(requestCode == REQ_CODE_RECORD_AUDIO && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-        }
-    }*/
 }

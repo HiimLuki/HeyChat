@@ -57,6 +57,7 @@ public class CreateGroupActivity extends AppCompatActivity {
 
                     Intent addGroupIntent = new Intent(CreateGroupActivity.this,AddToGroupActivity.class);
                     addGroupIntent.putExtra("groupname",group);
+                    addGroupIntent.putExtra("groupid", current_uid);
                     startActivity(addGroupIntent);
                 }
             }

@@ -5,103 +5,119 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray"
-    tools:context=".ChatActivity">
+    tools:context=".GroupChatActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/messages_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="620dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="55dp"
-        android:layout_weight="1"></android.support.v7.widget.RecyclerView>
-
-    <include
-        android:id="@+id/chat_app_bar"
-        layout="@layout/app_bar_layout" />
-
-    <com.bhargavms.dotloader.DotLoader
-        android:id="@+id/dot_loader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="55dp"
-        android:visibility="invisible"
-        app:color_array="@array/dot_colors"
-        app:dot_radius="4dp"
-        app:number_of_dots="3" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="0dp"
-        android:orientation="horizontal"
-        android:paddingTop="7dp">
-
-        <ImageButton
-            android:id="@+id/chat_add_btn"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            app:srcCompat="@drawable/iconplus" />
-
-        <EditText
-            android:id="@+id/chat_message_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:background="@android:color/white"
-            android:ems="10"
-            android:hint="Type a message..."
-            android:inputType="textPersonName"
-            android:paddingBottom="12dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="10dp"
-            android:paddingTop="14dp"
-            android:textSize="14sp" />
-
-        <ImageButton
-            android:id="@+id/chat_send_btn"
-            android:layout_width="90dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            app:srcCompat="@drawable/btnsend" />
-
-    </LinearLayout>
-
-    <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/content"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="270dp"
-        android:layout_marginTop="470dp"
-        app:rb_color="@color/red"
-        app:rb_duration="1000"
-        app:rb_radius="10dp"
-        app:rb_rippleAmount="4"
-        app:rb_scale="6">
+        android:layout_height="match_parent"
+        android:background="@drawable/backgroundchat"
+        tools:context=".ChatActivity">
 
         <Button
-            android:id="@+id/mRecordBtn"
+            android:id="@+id/chat_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="30dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/rounded_button"
-            android:text="Record" />
-    </com.skyfishjy.library.RippleBackground>
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="90dp"
+            android:layout_marginStart="22dp"
+            android:text="uploadVideo" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/messages_list"
+            android:layout_width="match_parent"
+            android:layout_height="620dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="55dp"
+            android:layout_weight="1">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <include
+            android:id="@+id/chat_app_bar"
+            layout="@layout/bar" />
+
+        <com.bhargavms.dotloader.DotLoader
+            android:id="@+id/dot_loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="55dp"
+            android:visibility="invisible"
+            app:color_array="@array/dot_colors"
+            app:dot_radius="4dp"
+            app:number_of_dots="3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="59dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal"
+            android:paddingTop="7dp">
+
+            <ImageButton
+                android:id="@+id/chat_add_btn"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                app:srcCompat="@drawable/iconplus" />
+
+            <EditText
+                android:id="@+id/chat_message_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@android:color/white"
+                android:ems="10"
+                android:hint="Type a message..."
+                android:inputType="textPersonName"
+                android:paddingBottom="12dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="10dp"
+                android:paddingTop="14dp"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/chat_send_btn"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                app:srcCompat="@drawable/btnsend" />
+
+        </LinearLayout>
+
+        <com.skyfishjy.library.RippleBackground xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/content"
+            android:layout_width="130dp"
+            android:layout_height="110dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="170dp"
+            android:layout_marginEnd="30dp"
+            app:rb_color="@color/red"
+            app:rb_duration="1000"
+            app:rb_radius="10dp"
+            app:rb_rippleAmount="4"
+            app:rb_scale="6">
+
+            <Button
+                android:id="@+id/mRecordBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/rounded_button"
+                android:text="Record" />
+        </com.skyfishjy.library.RippleBackground>
+
+    </RelativeLayout>
 </RelativeLayout>

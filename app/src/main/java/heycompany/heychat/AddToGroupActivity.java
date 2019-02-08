@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,14 +56,19 @@ public class AddToGroupActivity extends AppCompatActivity {
         //mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
+
         toChat_btn = (Button) findViewById(R.id.chat_btn);
 
         toChat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                    String group = getIntent().getStringExtra("groupid");
+                    String groupid = "John Doe";
                     Intent GroupChatIntent = new Intent(AddToGroupActivity.this,GroupChatActivity.class);
+                    GroupChatIntent.putExtra("groupid", groupid);
                     startActivity(GroupChatIntent);
+                    Log.d("tag", groupid);
                 }
             });
 
