@@ -94,6 +94,7 @@ public class ChatsFragment extends Fragment {
 
         Query conversationQuery = mConvDatabase.orderByChild("timestamp");
 
+
         FirebaseRecyclerAdapter<Chat, ConvViewHolder> firebaseConvAdapter = new FirebaseRecyclerAdapter<Chat, ConvViewHolder>(
                 Chat.class,
                 R.layout.users_single_layout,
