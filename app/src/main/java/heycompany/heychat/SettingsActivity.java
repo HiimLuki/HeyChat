@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -57,6 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button mImageBtn;
     private Button mPinBtn;
     private Button closeBtn;
+    private Button deleteBtn;
 
     private static final int GALLERY_PICK = 1;
 
@@ -117,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
         mImageBtn = (Button) findViewById(R.id.settings_image_btn);
         mPinBtn = (Button) findViewById(R.id.settings_privatePin_btn);
         closeBtn = (Button) findViewById(R.id.close_Btn);
+        deleteBtn = (Button) findViewById(R.id.delete_btn);
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
@@ -210,6 +214,23 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Intent closeIntent = new Intent(SettingsActivity.this, MainActivity.class);
                 startActivity(closeIntent);
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mCurrentUser.delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("Account", "User account deleted.");
+                                }
+                            }
+                        });
+
             }
         });
 
