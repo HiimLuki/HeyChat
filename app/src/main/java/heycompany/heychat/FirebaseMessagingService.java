@@ -1,5 +1,6 @@
 package heycompany.heychat;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -20,7 +21,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         String from_user_id = remoteMessage.getData().get("from_user_id");
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+        Notification.Builder mBuilder =new Notification.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(notification_title)
                 .setContentText(notification_message);

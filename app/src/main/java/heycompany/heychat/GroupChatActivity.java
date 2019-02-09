@@ -106,8 +106,7 @@ public class GroupChatActivity extends AppCompatActivity {
     int REQ_CODE_WRITE_STORAGE = 44;
     int REQ_CODE_READ_STORAGE = 43;
 
-    //String groupid = getIntent().getStringExtra("groupid");
-    String groupid = "Testerino";
+    //String groupid = "Testerino";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +120,8 @@ public class GroupChatActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_group_chat);
+
+        final String groupid = getIntent().getStringExtra("group_id");
 
         //Add Toolbar on Top
         mChatToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
@@ -177,7 +178,7 @@ public class GroupChatActivity extends AppCompatActivity {
         //Image
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-        loadMessages();
+        loadMessages(groupid);
 
         mTitleView.setText(userName);
 
@@ -200,7 +201,7 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                sendMessage();
+                sendMessage(groupid);
             }
         });
 
@@ -253,7 +254,7 @@ public class GroupChatActivity extends AppCompatActivity {
                             } else if (event.getAction() == MotionEvent.ACTION_UP) {
 
                                 stopRecording();
-                                uploadAudio();
+                                uploadAudio(groupid);
                                 rippleBackground.stopRippleAnimation();
 
                             }
@@ -271,10 +272,10 @@ public class GroupChatActivity extends AppCompatActivity {
             }
         });
 
-        loadMessages();
+        loadMessages(groupid);
     }
 
-    private void sendMessage() {
+    private void sendMessage(String groupid) {
 
         String message = mChatMessageView.getText().toString();
         if (!TextUtils.isEmpty(message)) {
@@ -312,7 +313,7 @@ public class GroupChatActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMessages() {
+    private void loadMessages(String groupid) {
 
         mRootRef.child("messages").child(groupid).addChildEventListener(new ChildEventListener() {
             @Override
@@ -410,7 +411,7 @@ public class GroupChatActivity extends AppCompatActivity {
         mRecorder = null;
     }
 
-    private void uploadAudio() {
+    private void uploadAudio(String groupid) {
 
         DatabaseReference user_message_push = mRootRef.child("messages")
                 .child(groupid).push();
@@ -462,8 +463,8 @@ public class GroupChatActivity extends AppCompatActivity {
     }
 
     //Wenn Bild ausgewählt, Speichern der Nachricht in der Datenbank mit Image Uri, bildtyp, time, von wem und speichern in einer Hashmap
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data, String groupid) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == SELECT_PICTURE && resultCode == RESULT_OK) {

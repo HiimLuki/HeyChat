@@ -36,6 +36,9 @@ public class CreateGroupActivity extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         final String current_uid = mCurrentUser.getUid();
 
+        DatabaseReference group_push = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).push();
+        final String push_id = group_push.getKey();
+
         //mRootRef = FirebaseDatabase.getInstance().getReference();
 
         final String status_value = getIntent().getStringExtra("status_value");
@@ -53,11 +56,11 @@ public class CreateGroupActivity extends AppCompatActivity {
                     Toast.makeText(CreateGroupActivity.this, "Please write your group name", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    CreateNewGroup(group, current_uid);
+                    CreateNewGroup(group, current_uid, push_id);
 
                     Intent addGroupIntent = new Intent(CreateGroupActivity.this,AddToGroupActivity.class);
                     addGroupIntent.putExtra("groupname",group);
-                    addGroupIntent.putExtra("groupid", current_uid);
+                    addGroupIntent.putExtra("group_id", push_id);
                     startActivity(addGroupIntent);
                 }
             }
@@ -66,7 +69,7 @@ public class CreateGroupActivity extends AppCompatActivity {
 
     }
 
-    private void CreateNewGroup(String group, String current_uid) {
+    private void CreateNewGroup(String group, String current_uid, String push_id) {
 
         /*Random rand = new Random();
         int a = rand.nextInt(9);
@@ -77,14 +80,15 @@ public class CreateGroupActivity extends AppCompatActivity {
         int f = rand.nextInt(9);
         String random = String.valueOf(a) + String.valueOf(b) + String.valueOf(c) + String.valueOf(d) + String.valueOf(e) + String.valueOf(f);
 */
-        mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child("groupinfo");
+
+        mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child(push_id).child("groupinfo");
 
         HashMap<String, String> userMap = new HashMap<>();
         userMap.put("name", group);
         userMap.put("admin", current_uid);
         mDatabaseInfo.setValue(userMap);
 
-        mDatabaseMember = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child("member").child(current_uid);
+        mDatabaseMember = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child(push_id).child("member").child(current_uid);
 
         HashMap<String, String> adminMap = new HashMap<>();
         adminMap.put("seen", "false");

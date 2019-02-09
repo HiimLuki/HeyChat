@@ -63,12 +63,12 @@ public class AddToGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    String group = getIntent().getStringExtra("groupid");
-                    String groupid = "John Doe";
+                    String group_id = getIntent().getStringExtra("group_id");
+
                     Intent GroupChatIntent = new Intent(AddToGroupActivity.this,GroupChatActivity.class);
-                    GroupChatIntent.putExtra("groupid", groupid);
+                    GroupChatIntent.putExtra("group_id", group_id);
                     startActivity(GroupChatIntent);
-                    Log.d("tag", groupid);
+                    Log.d("tag", group_id);
                 }
             });
 

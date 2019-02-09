@@ -44,6 +44,7 @@ public class ChatsFragment extends Fragment {
     private DatabaseReference mConvDatabase;
     private DatabaseReference mMessageDatabase;
     private DatabaseReference mUsersDatabase;
+    private DatabaseReference mGroupDatabase;
 
     private FirebaseAuth mAuth;
 
@@ -67,6 +68,8 @@ public class ChatsFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
+
+        mGroupDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id);
 
         mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
 
@@ -93,7 +96,7 @@ public class ChatsFragment extends Fragment {
         super.onStart();
 
         Query conversationQuery = mConvDatabase.orderByChild("timestamp");
-
+        Query groupsQuery = mGroupDatabase.orderByChild("timestamp");
 
         FirebaseRecyclerAdapter<Chat, ConvViewHolder> firebaseConvAdapter = new FirebaseRecyclerAdapter<Chat, ConvViewHolder>(
                 Chat.class,
