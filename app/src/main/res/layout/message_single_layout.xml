@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/message_single_layout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:paddingBottom="5dp">
@@ -19,7 +19,7 @@
         android:paddingEnd="13dp"
         android:paddingStart="13dp"
         android:paddingTop="8dp"
-        android:text="TextView"
+        android:text="Hey Man!"
         android:textColor="@android:color/white"
         android:textSize="15sp" />
 

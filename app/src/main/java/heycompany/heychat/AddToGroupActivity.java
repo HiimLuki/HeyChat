@@ -35,6 +35,9 @@ public class AddToGroupActivity extends AppCompatActivity {
     //Online Status
     private DatabaseReference mUserRef;
     private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseInfo;
+    private DatabaseReference mDatabaseUser;
+    private DatabaseReference mDatabaseUser2;
     private FirebaseAuth mAuth;
     private String mCurrent_user_id;
     private Button toChat_btn;
@@ -118,11 +121,34 @@ public class AddToGroupActivity extends AppCompatActivity {
 
                         Intent intent = getIntent();
                         String group = intent.getStringExtra("groupname");
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id).child("member").child(user_id);
+                        String admin = intent.getStringExtra("admin");
+                        String group_id = getIntent().getStringExtra("group_id");
+
+                        //Add DatabaseInfo (GroupInfo) for UserBranch
+                        mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("groupinfo");
+                        HashMap<String, String> addMap = new HashMap<>();
+                        addMap.put("name", group);
+                        addMap.put("admin", admin);
+                        mDatabaseInfo.setValue(addMap);
+
+                        //Add in Creator Branch the other Member Onclicked
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id).child(group_id).child("member").child(user_id);
                         HashMap<String, String> userMap = new HashMap<>();
                         userMap.put("seen", "false");
-
                         mDatabase.setValue(userMap);
+
+                        //Add in User Branch the Member of Creator
+                        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(mCurrent_user_id);
+                        HashMap<String, String> memberMap = new HashMap<>();
+                        memberMap.put("seen", "false");
+                        mDatabaseUser.setValue(memberMap);
+
+                        //Add in User Branch the Member of the User
+                        mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(user_id);
+                        HashMap<String, String> memberMap2 = new HashMap<>();
+                        memberMap2.put("seen", "false");
+                        mDatabaseUser2.setValue(memberMap2);
+
 
                     }
                 });

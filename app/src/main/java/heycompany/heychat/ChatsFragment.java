@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,6 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatsFragment extends Fragment {
 
     private RecyclerView mConvList;
+    private RecyclerView mGroupList;
 
     private DatabaseReference mConvDatabase;
     private DatabaseReference mMessageDatabase;
@@ -65,6 +68,8 @@ public class ChatsFragment extends Fragment {
         mMainView = inflater.inflate(R.layout.fragment_chats, container, false);
 
         mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
+        mGroupList = (RecyclerView) mMainView.findViewById(R.id.group_list);
+
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
@@ -84,6 +89,11 @@ public class ChatsFragment extends Fragment {
 
         mConvList.setHasFixedSize(true);
         mConvList.setLayoutManager(linearLayoutManager);
+
+        LinearLayoutManager GroupManager = new LinearLayoutManager(getContext());
+        GroupManager.setReverseLayout(true);
+        GroupManager.setStackFromEnd(true);
+        mGroupList.setLayoutManager(GroupManager);
 
 
         // Inflate the layout for this fragment
@@ -197,7 +207,109 @@ public class ChatsFragment extends Fragment {
 
         mConvList.setAdapter(firebaseConvAdapter);
 
+
+        FirebaseRecyclerAdapter<Chat, ConvViewHolder> firebaseGroupAdapter = new FirebaseRecyclerAdapter<Chat, ConvViewHolder>(
+                Chat.class,
+                R.layout.users_single_layout,
+                ConvViewHolder.class,
+                groupsQuery
+        ) {
+            @Override
+            protected void populateViewHolder(final ConvViewHolder GroupChatViewholder, final Chat conv, int i) {
+
+                final String list_user_id = getRef(i).getKey();
+
+                Query lastGroupMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
+
+                lastGroupMessageQuery.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        String data = dataSnapshot.child("message").getValue().toString();
+                        String type = dataSnapshot.child("type").getValue().toString();
+
+                        GroupChatViewholder.setMessage(data, type, conv.isSeen());
+
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+                });
+
+
+                mGroupDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        //final String groupName = dataSnapshot.child("name").getValue().toString();
+                        //String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
+
+                        if(dataSnapshot.hasChild("online")) {
+
+                            String userOnline = dataSnapshot.child("online").getValue().toString();
+                            GroupChatViewholder.setUserOnline(userOnline);
+
+                        }
+
+                        //convViewHolder.setName(groupName);
+                        //convViewHolder.setUserImage(userThumb, getContext());
+
+                        GroupChatViewholder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+                                Intent groupChatIntent = new Intent(getContext(), GroupChatActivity.class);
+                                groupChatIntent.putExtra("user_id", list_user_id);
+                                //groupChatIntent.putExtra("user_name", groupName);
+                                startActivity(groupChatIntent);
+
+                            }
+                        });
+
+                        GroupChatViewholder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                Log.d("Hallo", "test");
+                                return true;
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        };
+
+        mGroupList.setAdapter(firebaseGroupAdapter);
+
+
     }
+
+
 
     public static class ConvViewHolder extends RecyclerView.ViewHolder {
 
