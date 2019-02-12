@@ -1,10 +1,13 @@
 package heycompany.heychat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mProfileImage;
     private TextView mProfileName, mProfileStatus, mProfileFriendsCount;
     private Button mProfileSendReqBtn, mDeclineBtn;
+    private Button backBtn;
 
     private DatabaseReference mUsersDatabase;
 
@@ -57,6 +61,13 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        //Leiste unsichtbar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
@@ -110,12 +121,22 @@ public class ProfileActivity extends AppCompatActivity {
         mProfileFriendsCount = (TextView) findViewById(R.id.profile_totalFriends);
         mProfileSendReqBtn = (Button) findViewById(R.id.profile_send_req_btn);
         mDeclineBtn = (Button) findViewById(R.id.profile_decline_btn);
+        backBtn = (Button) findViewById(R.id.back_Btn);
 
 
         mCurrent_state = "not_friends";
 
         mDeclineBtn.setVisibility(View.INVISIBLE);
         mDeclineBtn.setEnabled(false);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent closeIntent = new Intent(ProfileActivity.this, UsersActivity.class);
+                startActivity(closeIntent);
+            }
+        });
 
 
         mUsersDatabase.addValueEventListener(new ValueEventListener() {
