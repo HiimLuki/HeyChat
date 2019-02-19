@@ -1,10 +1,16 @@
 package heycompany.heychat;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,15 +18,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
@@ -123,6 +138,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             viewHolder.messageVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    //download_video(v, c.getMessage());
                     play_video(v, c.getMessage());
                     return false;
                 }
@@ -172,6 +188,81 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         videoView.start();
 
+    }
+
+    private void download_video (final View v,final String url){
+
+        /*FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference island = storage.getReferenceFromUrl(url);
+
+        File rootPath = new File(Environment.getExternalStorageDirectory(), "HeyChat");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
+        }
+
+        final File localFile = new File(rootPath,"video.mp4");
+        Log.d("toast", "downloaded" + island);
+        island.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Log.d("toast", "downloaded");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("toast", "failed");
+            }
+        });*/
+
+
+        StorageReference  video = FirebaseStorage.getInstance().getReference();
+        StorageReference videoref = FirebaseStorage.getInstance().getReferenceFromUrl(url);
+        //StorageReference videoref = video.child("video_message").child(url);
+        try {
+            File file = File.createTempFile("videos", "mp4");
+
+            videoref.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                downloadfile(v.getContext(),"Mobile", "mp4", DIRECTORY_DOWNLOADS, url);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+
+        }catch (IOException e){
+
+        }
+      /*  videoref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String url = uri.toString();
+                //downloadfile(MessageAdapter.this , "Mobile", ".mp4", DIRECTORY_DOWNLOADS,url);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });*/
+
+    }
+
+    private void downloadfile(Context context, String fileName, String fileExtension, String destinationDirectory, String uri){
+
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri url = Uri.parse(uri);
+        DownloadManager.Request request = new DownloadManager.Request(url);
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context,destinationDirectory, fileName + fileExtension);
+
+        downloadManager.enqueue(request);
     }
 
 }

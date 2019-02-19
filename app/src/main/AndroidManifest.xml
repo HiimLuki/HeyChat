@@ -37,7 +37,8 @@
             android:name=".LoginActivity"
             android:parentActivityName=".StartActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".StatusActivity"
             android:parentActivityName=".SettingsActivity" />
@@ -62,9 +63,10 @@
             android:name=".PinActivity"
             android:parentActivityName=".SettingsActivity" />
         <activity android:name=".PrivateLoginActivity" />
+        <activity android:name=".GroupChatActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".AddToGroupActivity" />
-        <activity android:name=".GroupChatActivity" />
         <activity android:name=".sidebarActivity" />
         <activity android:name=".Onboarding" />
         <activity android:name=".PasswordResetActivity"></activity>

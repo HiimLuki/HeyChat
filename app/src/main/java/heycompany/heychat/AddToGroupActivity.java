@@ -129,6 +129,7 @@ public class AddToGroupActivity extends AppCompatActivity {
                         HashMap<String, String> addMap = new HashMap<>();
                         addMap.put("name", group);
                         addMap.put("admin", admin);
+                        addMap.put("groupid",group_id);
                         mDatabaseInfo.setValue(addMap);
 
                         //Add in Creator Branch the other Member Onclicked

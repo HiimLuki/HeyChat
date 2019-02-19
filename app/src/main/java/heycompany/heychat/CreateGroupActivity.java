@@ -87,6 +87,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         HashMap<String, String> userMap = new HashMap<>();
         userMap.put("name", group);
         userMap.put("admin", current_uid);
+        userMap.put("groupid", push_id);
         mDatabaseInfo.setValue(userMap);
 
         mDatabaseMember = FirebaseDatabase.getInstance().getReference().child("Groups").child(current_uid).child(push_id).child("member").child(current_uid);

@@ -69,6 +69,7 @@ public class ChatsFragment extends Fragment {
 
         mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
         mGroupList = (RecyclerView) mMainView.findViewById(R.id.group_list);
+        mGroupList.bringToFront();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -91,7 +92,7 @@ public class ChatsFragment extends Fragment {
         mConvList.setLayoutManager(linearLayoutManager);
 
         LinearLayoutManager GroupManager = new LinearLayoutManager(getContext());
-        GroupManager.setReverseLayout(true);
+        //GroupManager.setReverseLayout(true);
         GroupManager.setStackFromEnd(true);
         mGroupList.setLayoutManager(GroupManager);
 
@@ -259,6 +260,8 @@ public class ChatsFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         final String groupName = dataSnapshot.child("groupinfo").child("name").getValue().toString();
+                        final String groupID = dataSnapshot.child("groupinfo").child("groupid").getValue().toString();
+                        Log.d("hallo", "id:" + groupID);
                         //String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
 
                         GroupChatViewholder.setName(groupName);
@@ -268,10 +271,12 @@ public class ChatsFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
 
+                                Log.d("hallo", "geht der hier rein?");
 
-                                Intent groupchatIntent = new Intent(getContext(), ChatActivity.class);
+                                Intent groupchatIntent = new Intent(getContext(), GroupChatActivity.class);
                                 groupchatIntent.putExtra("user_id", list_user_id);
                                 groupchatIntent.putExtra("user_name", groupName);
+                                groupchatIntent.putExtra("group_id", groupID);
                                 startActivity(groupchatIntent);
 
                             }
