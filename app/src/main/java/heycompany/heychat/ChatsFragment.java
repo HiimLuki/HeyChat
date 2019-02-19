@@ -118,7 +118,6 @@ public class ChatsFragment extends Fragment {
             protected void populateViewHolder(final ConvViewHolder convViewHolder, final Chat conv, int i) {
 
 
-
                 final String list_user_id = getRef(i).getKey();
 
                 Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
@@ -208,14 +207,14 @@ public class ChatsFragment extends Fragment {
         mConvList.setAdapter(firebaseConvAdapter);
 
 
-        FirebaseRecyclerAdapter<Chat, ConvViewHolder> firebaseGroupAdapter = new FirebaseRecyclerAdapter<Chat, ConvViewHolder>(
+        FirebaseRecyclerAdapter<Chat, GroupChatViewholder> firebaseGroupAdapter = new FirebaseRecyclerAdapter<Chat, GroupChatViewholder>(
                 Chat.class,
                 R.layout.users_single_layout,
-                ConvViewHolder.class,
+                GroupChatViewholder.class,
                 groupsQuery
         ) {
             @Override
-            protected void populateViewHolder(final ConvViewHolder GroupChatViewholder, final Chat conv, int i) {
+            protected void populateViewHolder(final GroupChatViewholder GroupChatViewholder, final Chat conv, int i) {
 
                 final String list_user_id = getRef(i).getKey();
 
@@ -259,33 +258,26 @@ public class ChatsFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        //final String groupName = dataSnapshot.child("name").getValue().toString();
+                        final String groupName = dataSnapshot.child("groupinfo").child("name").getValue().toString();
                         //String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
 
-                        if(dataSnapshot.hasChild("online")) {
-
-                            String userOnline = dataSnapshot.child("online").getValue().toString();
-                            GroupChatViewholder.setUserOnline(userOnline);
-
-                        }
-
-                        //convViewHolder.setName(groupName);
+                        GroupChatViewholder.setName(groupName);
                         //convViewHolder.setUserImage(userThumb, getContext());
 
-                        GroupChatViewholder.mView.setOnClickListener(new View.OnClickListener() {
+                       GroupChatViewholder.groupView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
 
-                                Intent groupChatIntent = new Intent(getContext(), GroupChatActivity.class);
-                                groupChatIntent.putExtra("user_id", list_user_id);
-                                //groupChatIntent.putExtra("user_name", groupName);
-                                startActivity(groupChatIntent);
+                                Intent groupchatIntent = new Intent(getContext(), ChatActivity.class);
+                                groupchatIntent.putExtra("user_id", list_user_id);
+                                groupchatIntent.putExtra("user_name", groupName);
+                                startActivity(groupchatIntent);
 
                             }
                         });
 
-                        GroupChatViewholder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                        GroupChatViewholder.groupView.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
                                 Log.d("Hallo", "test");
@@ -375,6 +367,58 @@ public class ChatsFragment extends Fragment {
                 userOnlineView.setVisibility(View.INVISIBLE);
 
             }
+
+        }
+
+    }
+
+    public static class GroupChatViewholder extends RecyclerView.ViewHolder {
+
+        View groupView;
+
+        public GroupChatViewholder(View itemView) {
+            super(itemView);
+
+            groupView = itemView;
+
+        }
+
+        public void setMessage(String message,String type, boolean isSeen){
+
+            TextView userStatusView = (TextView) groupView.findViewById(R.id.user_single_status);
+            if (type.equals("image")){
+                userStatusView.setText("Bild");
+            }
+            else if (type.equals("voice")){
+                userStatusView.setText("Sprachnachricht");
+            }
+            else if (type.equals("video")){
+                userStatusView.setText("Video");
+            }
+            else{
+                userStatusView.setText(message);
+            }
+
+
+            if(!isSeen){
+                userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);
+            } else {
+                userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.NORMAL);
+            }
+
+        }
+
+        public void setName(String name){
+
+            TextView userNameView = (TextView) groupView.findViewById(R.id.user_single_name);
+            userNameView.setText(name);
+
+        }
+
+        public void setUserImage(String thumb_image, Context ctx){
+
+            CircleImageView userImageView = (CircleImageView) groupView.findViewById(R.id.user_single_image);
+            Picasso.get().load(thumb_image).placeholder(R.drawable.placeholder).into(userImageView);
 
         }
 
