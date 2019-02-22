@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.rey.material.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,4 +7,42 @@
     android:background="@drawable/background"
     tools:context=".GroupInfo">
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/add_contact"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="17dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/addcontact" />
+
+    <Button
+        android:id="@+id/chevronleft"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/add_contact"
+        android:background="@drawable/chevronleft" />
+
+    <Button
+        android:id="@+id/change"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignEnd="@+id/add_contact"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="214dp"
+        android:background="@drawable/pencil" />
+
+    <ImageView
+        android:id="@+id/groupimage"
+        android:layout_width="412dp"
+        android:layout_height="274dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/chevronleft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/groupprofile" />
+
+</com.rey.material.widget.RelativeLayout>
