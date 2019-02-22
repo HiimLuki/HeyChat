@@ -96,58 +96,62 @@
         android:layout_height="54dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/statusbtn"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/backgroundimage"
+        app:layout_constraintBottom_toTopOf="@+id/delete_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/settings_privatePin_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="112dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:backgroundTint="@color/white"
+        android:background="@drawable/privatepin"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
-        android:text="set private pin "
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/settings_status_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/delete_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="DeleteAccount"
+        android:background="@drawable/deletebtn"
+        app:layout_constraintBottom_toBottomOf="@+id/backgroundimage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_status" />
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="PrivateLogin"
+        android:background="@drawable/privatelogin"
+        app:layout_constraintBottom_toTopOf="@+id/settings_privatePin_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/delete_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_status" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -41,6 +41,7 @@ public class AddToGroupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String mCurrent_user_id;
     private Button toChat_btn;
+    private Button closeBtn;
 
 
     @Override
@@ -59,6 +60,8 @@ public class AddToGroupActivity extends AppCompatActivity {
         //mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
+        closeBtn = (Button) findViewById(R.id.close_Btn2);
+
 
         toChat_btn = (Button) findViewById(R.id.chat_btn);
 
@@ -74,6 +77,15 @@ public class AddToGroupActivity extends AppCompatActivity {
                     Log.d("tag", group_id);
                 }
             });
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent closeIntent = new Intent(AddToGroupActivity.this, CreateGroupActivity.class);
+                startActivity(closeIntent);
+            }
+        });
 
 
     }

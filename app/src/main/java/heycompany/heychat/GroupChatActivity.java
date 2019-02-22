@@ -195,6 +195,14 @@ public class GroupChatActivity extends AppCompatActivity {
         Video_btn = (Button) findViewById(R.id.chat_video);
 
 
+        mChatToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent GroupInfoIntent = new Intent(GroupChatActivity.this,GroupInfo.class);
+                startActivity(GroupInfoIntent);
+                Log.d("test", "test");
+            }
+        });
 
         //Onclick für den Sendenachricht Button
         mChatSendBtn.setOnClickListener(new View.OnClickListener() {

@@ -500,7 +500,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-
         String message = mChatMessageView.getText().toString();
         if (!TextUtils.isEmpty(message)) {
 

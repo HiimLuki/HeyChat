@@ -45,8 +45,8 @@ tools:context=".PinActivity">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="250dp"
         android:layout_marginLeft="25dp"
-        android:text="Please enter a passwort with at least 6 characters" />
+        android:layout_marginTop="250dp"
+        android:text="Please enter a Pin  with at least 6 characters" />
 
 </RelativeLayout>
