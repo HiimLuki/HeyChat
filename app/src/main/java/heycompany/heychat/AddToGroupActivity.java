@@ -16,8 +16,11 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -38,6 +41,7 @@ public class AddToGroupActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseInfo;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
+    private DatabaseReference mUserInfo;
     private FirebaseAuth mAuth;
     private String mCurrent_user_id;
     private Button toChat_btn;
@@ -55,9 +59,13 @@ public class AddToGroupActivity extends AppCompatActivity {
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
+        mUsersDatabase.keepSynced(true);
+
+        mUserInfo = FirebaseDatabase.getInstance().getReference().child("Users");
+        mUserInfo.keepSynced(true);
 
         mUsersList = (RecyclerView) findViewById(R.id.addfriend_list);
-        //mUsersList.setHasFixedSize(true);
+        mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
         closeBtn = (Button) findViewById(R.id.close_Btn2);
@@ -86,7 +94,6 @@ public class AddToGroupActivity extends AppCompatActivity {
                 startActivity(closeIntent);
             }
         });
-
 
     }
 
@@ -120,51 +127,67 @@ public class AddToGroupActivity extends AppCompatActivity {
         ){
 
             @Override
-            protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {
-                usersViewHolder.setDisplayName(users.getName());
-                usersViewHolder.setStatus(users.getStatus());
-                usersViewHolder.setUserImage(users.getThumb_image(), getApplicationContext());
+            protected void populateViewHolder(final UsersViewHolder usersViewHolder, final Users users, int position) {
 
                 final String user_id = getRef(position).getKey();
 
-                usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                mUserInfo.child(user_id).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final String userName = dataSnapshot.child("name").getValue().toString();
+                        String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
 
-                        Intent intent = getIntent();
-                        String group = intent.getStringExtra("groupname");
-                        String admin = intent.getStringExtra("admin");
-                        String group_id = getIntent().getStringExtra("group_id");
+                        usersViewHolder.setDisplayName(userName);
+                        usersViewHolder.setStatus(users.getStatus());
+                        usersViewHolder.setUserImage(userThumb, getApplicationContext());
 
-                        //Add DatabaseInfo (GroupInfo) for UserBranch
-                        mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("groupinfo");
-                        HashMap<String, String> addMap = new HashMap<>();
-                        addMap.put("name", group);
-                        addMap.put("admin", admin);
-                        addMap.put("groupid",group_id);
-                        mDatabaseInfo.setValue(addMap);
+                        usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                        //Add in Creator Branch the other Member Onclicked
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id).child(group_id).child("member").child(user_id);
-                        HashMap<String, String> userMap = new HashMap<>();
-                        userMap.put("seen", "false");
-                        mDatabase.setValue(userMap);
+                                Intent intent = getIntent();
+                                String group = intent.getStringExtra("groupname");
+                                String admin = intent.getStringExtra("admin");
+                                String group_id = getIntent().getStringExtra("group_id");
 
-                        //Add in User Branch the Member of Creator
-                        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(mCurrent_user_id);
-                        HashMap<String, String> memberMap = new HashMap<>();
-                        memberMap.put("seen", "false");
-                        mDatabaseUser.setValue(memberMap);
+                                //Add DatabaseInfo (GroupInfo) for UserBranch
+                                mDatabaseInfo = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("groupinfo");
+                                HashMap<String, String> addMap = new HashMap<>();
+                                addMap.put("name", group);
+                                addMap.put("admin", admin);
+                                addMap.put("groupid",group_id);
+                                mDatabaseInfo.setValue(addMap);
 
-                        //Add in User Branch the Member of the User
-                        mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(user_id);
-                        HashMap<String, String> memberMap2 = new HashMap<>();
-                        memberMap2.put("seen", "false");
-                        mDatabaseUser2.setValue(memberMap2);
+                                //Add in Creator Branch the other Member Onclicked
+                                mDatabase = FirebaseDatabase.getInstance().getReference().child("Groups").child(mCurrent_user_id).child(group_id).child("member").child(user_id);
+                                HashMap<String, String> userMap = new HashMap<>();
+                                userMap.put("seen", "false");
+                                mDatabase.setValue(userMap);
 
+                                //Add in User Branch the Member of Creator
+                                mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(mCurrent_user_id);
+                                HashMap<String, String> memberMap = new HashMap<>();
+                                memberMap.put("seen", "false");
+                                mDatabaseUser.setValue(memberMap);
+
+                                //Add in User Branch the Member of the User
+                                mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Groups").child(user_id).child(group_id).child("member").child(user_id);
+                                HashMap<String, String> memberMap2 = new HashMap<>();
+                                memberMap2.put("seen", "false");
+                                mDatabaseUser2.setValue(memberMap2);
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
+
+
+
 
             }
         };
