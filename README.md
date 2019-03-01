@@ -3,4 +3,4 @@ Messenger
 
 
 
-Download previous Version of [HeyChat](https://github.com/HiimLuki/HeyChat/raw/master/Apk/HeyChatv02.apk).
+Download previous Version of [HeyChat](https://github.com/HiimLuki/HeyChat/raw/master/Apk/HeyChat.apk).
