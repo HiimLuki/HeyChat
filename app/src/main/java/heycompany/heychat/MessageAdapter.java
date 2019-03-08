@@ -77,7 +77,6 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-
         mAuth = FirebaseAuth.getInstance();
         String current_user_id = mAuth.getCurrentUser().getUid();
         c = mMessageList.get(i);
@@ -90,14 +89,13 @@ public class MessageAdapter extends RecyclerView.Adapter{
             TextViewholder textHolder = new TextViewholder();
         }
         else if (message_type.equals("voice")){
-
+            VoiceViewholder voiceHolder = new VoiceViewholder();
         }
         else if( message_type.equals("image")) {
-
-
+            ImageViewholder imageHolder = new ImageViewholder();
         }
         else if( message_type.equals("video")) {
-
+            VideoViewholder videoHolder = new VideoViewholder();
         }
 
     }
