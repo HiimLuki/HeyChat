@@ -44,6 +44,8 @@ public class MessageAdapter extends RecyclerView.Adapter{
     private Messages c;
     public TextView messageText;
 
+    private String textMessage_SEND = "text";
+
 
     public MessageAdapter(List<Messages> mMessageList) {
 
@@ -60,17 +62,22 @@ public class MessageAdapter extends RecyclerView.Adapter{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        if(viewType == 1){
-            String text = "text";
+        String VIEW_TYPE = String.valueOf(viewType);
+        if(VIEW_TYPE.equals("text")){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
+            return new TextViewholder(v);
         }
-
-        if(viewType.equals("video")){
+        else if(VIEW_TYPE.equals("image")){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_single_layout, parent, false);
+            return new ImageViewholder(v);
+        }
+        else if(VIEW_TYPE.equals("voice")){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.voice_single_layout, parent, false);
+            return new VoiceViewholder(v);
+        }
+        else if(VIEW_TYPE.equals("video")){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_single_layout, parent, false);
             return new VideoViewholder(v);
-
-        }
-        else{
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
         }
         return null;
     }
@@ -87,6 +94,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
         if(message_type.equals("text")){
             //((TextViewholder) viewHolder).bindText(c.getMessage());
             TextViewholder textHolder = new TextViewholder();
+            
         }
         else if (message_type.equals("voice")){
             VoiceViewholder voiceHolder = new VoiceViewholder();
