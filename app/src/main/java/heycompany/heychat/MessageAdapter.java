@@ -47,6 +47,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private String textMessage_SEND = "text";
 
+    private static final int VIEW_TYPE_EMPTY = 0;
     private static final int VIEW_TYPE_TEXTMESSAGE = 1;
     private static final int VIEW_TYPE_IMAGEMESSAGE = 2;
     private static final int VIEW_TYPE_VOICEMESSAGE = 3;
@@ -74,8 +75,10 @@ public class MessageAdapter extends RecyclerView.Adapter{
             return VIEW_TYPE_IMAGEMESSAGE;
         } else if (message.getType().equals("voice")) {
             return VIEW_TYPE_VOICEMESSAGE;
-        } else {
+        } else if(message.getType().equals("video")) {
             return VIEW_TYPE_VIDEOMESSAGE;
+        } else{
+            return VIEW_TYPE_EMPTY;
         }
     }
 
