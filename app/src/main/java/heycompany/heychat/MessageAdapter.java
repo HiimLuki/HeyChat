@@ -64,6 +64,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         String VIEW_TYPE = String.valueOf(viewType);
+
         if(VIEW_TYPE.equals("text")){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
             return new TextViewholder(v);
