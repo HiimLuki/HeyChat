@@ -624,8 +624,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void stopRecording2(){
-        mRecorder.release();
-        mRecorder =null;
+       mRecorder.reset();
     }
 
 

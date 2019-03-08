@@ -24,10 +24,13 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 			const userName = userResult.val();
 			
 			const deviceToken = admin.database().ref(`/Users/${user_id}/device_token`).once('value');
+			
 	
 			return deviceToken.then(result => {
 		
 				const token_id = result.val();
+				
+				console.log(token_id);
 		
 				const payload = {
 					notification : {
@@ -41,9 +44,11 @@ exports.sendNotification = functions.database.ref('/notifications/{user_id}/{not
 					}
 				};
 	
-				return admin.messaging().sendToDevice(token_id, payload).then(response => {
+				return admin.messaging().sendToDevice(token_id, payload).then(function(response) {
 		
 					return console.log('This was the notification Feature');
+				}).catch(function(error) {
+					console.log('Error sending Notification', error);
 				});
 			});
 		});

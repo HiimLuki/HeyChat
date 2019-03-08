@@ -69,7 +69,10 @@ public class ChatsFragment extends Fragment {
 
         mConvList = (RecyclerView) mMainView.findViewById(R.id.conv_list);
         mGroupList = (RecyclerView) mMainView.findViewById(R.id.group_list);
-        mGroupList.bringToFront();
+        //mGroupList.bringToFront();
+        //mGroupList.setZ(1);
+        //mConvList.setZ(1);
+
 
         mAuth = FirebaseAuth.getInstance();
 
