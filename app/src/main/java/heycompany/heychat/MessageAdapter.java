@@ -37,10 +37,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
+public class MessageAdapter extends RecyclerView.Adapter{
 
     private FirebaseAuth mAuth;
     private List<Messages> mMessageList;
+    private Messages c;
+    public TextView messageText;
+
 
     public MessageAdapter(List<Messages> mMessageList) {
 
@@ -49,111 +52,54 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     @Override
-    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public int getItemCount() {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_single_layout ,parent, false);
-
-        View r = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.textmessage_send,parent, false);
-
-        return new MessageViewHolder(v);
-    }
-
-    public class MessageViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView messageText;
-        public TextView messageTextIch;
-        public ImageView messageImage;
-        public Button messageVoice;
-        public VideoView messageVideo;
-        public CircleImageView profileImage;
-
-
-        public MessageViewHolder(View view) {
-            super(view);
-
-            messageText = (TextView) view.findViewById(R.id.message_text_layout);
-            messageTextIch = (TextView) view.findViewById(R.id.message_text_layout);
-            messageImage = (ImageView) view.findViewById(R.id.message_image_layout);
-            messageVoice = (Button) view.findViewById(R.id.message_voice_layout);
-            messageVideo = (VideoView) view.findViewById(R.id.VideoView);
-
-        }
+        return mMessageList.size();
     }
 
     @Override
-    public void onBindViewHolder(final MessageViewHolder viewHolder, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v;
+        if(viewType == 1){
+            String text = "text";
+        }
+
+        if(viewType.equals("video")){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_single_layout, parent, false);
+            return new VideoViewholder(v);
+
+        }
+        else{
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
+        }
+        return null;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
 
         mAuth = FirebaseAuth.getInstance();
         String current_user_id = mAuth.getCurrentUser().getUid();
-        final Messages c = mMessageList.get(i);
+        c = mMessageList.get(i);
         String from_user = c.getFrom();
         String message_type = c.getType();
 
-        if(from_user.equals(current_user_id)){
-            viewHolder.messageTextIch.setBackgroundResource(R.drawable.message_text_backgroundich);
-            viewHolder.messageTextIch.setTextColor(Color.BLACK);
-
-        }else{
-            viewHolder.messageText.setBackgroundResource(R.drawable.message_text_background);
-            viewHolder.messageText.setTextColor(Color.WHITE);
-
-        }
-        viewHolder.messageText.setText(c.getMessage());
 
         if(message_type.equals("text")){
-
-            viewHolder.messageText.setText(c.getMessage());
-            viewHolder.messageImage.setVisibility(View.INVISIBLE);
-            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
-            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
+            //((TextViewholder) viewHolder).bindText(c.getMessage());
+            TextViewholder textHolder = new TextViewholder();
         }
         else if (message_type.equals("voice")){
-                viewHolder.messageImage.setVisibility(View.INVISIBLE);
-                viewHolder.messageText.setVisibility(View.INVISIBLE);
-                viewHolder.messageVoice.setVisibility(View.VISIBLE);
-            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
-                viewHolder.messageVoice.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        play_sound(v, c.getMessage());
 
-                    }
-                });
         }
         else if( message_type.equals("image")) {
 
-            viewHolder.messageText.setVisibility(View.INVISIBLE);
-            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
-            viewHolder.messageVideo.setVisibility(View.INVISIBLE);
-            Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(viewHolder.messageImage);
 
         }
         else if( message_type.equals("video")) {
 
-            viewHolder.messageText.setVisibility(View.INVISIBLE);
-            viewHolder.messageVoice.setVisibility(View.INVISIBLE);
-            viewHolder.messageVideo.setVisibility(View.VISIBLE);
-            viewHolder.messageVideo.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    //download_video(v, c.getMessage());
-                    play_video(v, c.getMessage());
-                    return false;
-                }
-            });
-
         }
 
-    }
-
-
-
-    @Override
-    public int getItemCount() {
-
-        return mMessageList.size();
     }
 
     private void play_sound(View v, String url){
@@ -263,6 +209,72 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         request.setDestinationInExternalFilesDir(context,destinationDirectory, fileName + fileExtension);
 
         downloadManager.enqueue(request);
+    }
+
+    private class TextViewholder extends  RecyclerView.ViewHolder{
+        public TextView messageText;
+
+        public TextViewholder(View itemView) {
+            super(itemView);
+
+            messageText = (TextView) itemView.findViewById(R.id.message_text_layout);
+        }
+        void bindText(final Messages c){
+            messageText.setText(c.getMessage());
+        }
+    }
+
+    private class VideoViewholder extends RecyclerView.ViewHolder{
+        VideoView messageVideo;
+
+        public VideoViewholder(View itemView) {
+            super(itemView);
+
+            messageVideo = (VideoView) itemView.findViewById(R.id.VideoView);
+        }
+        void bindVideo(final Messages c){
+            messageVideo.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    //download_video(v, c.getMessage());
+                    play_video(v, c.getMessage());
+                    return false;
+                }
+            });
+        }
+
+    }
+
+    private class ImageViewholder extends RecyclerView.ViewHolder{
+        public ImageView messageImage;
+
+        public ImageViewholder(View itemView) {
+            super(itemView);
+
+            messageImage = (ImageView) itemView.findViewById(R.id.message_image_layout);
+        }
+        void bindImage(final Messages c){
+            Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(messageImage);
+        }
+    }
+
+    private class VoiceViewholder extends RecyclerView.ViewHolder{
+        public Button messageVoice;
+
+        public VoiceViewholder(View itemView) {
+            super(itemView);
+
+            messageVoice = (Button) itemView.findViewById(R.id.message_voice_layout);
+        }
+
+            void bindVoice(final Messages c){
+            messageVoice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    play_sound(v, c.getMessage());
+                }
+            });
+        }
     }
 
 }
