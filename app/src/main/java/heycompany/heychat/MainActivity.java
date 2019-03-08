@@ -152,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
-            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+            mUserRef.child("online").setValue(System.currentTimeMillis());
+            //Timestamp server value
+            //ServerValue.TIMESTAMP
         }
     }
 

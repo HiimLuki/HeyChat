@@ -33,6 +33,10 @@ public class PinActivity extends AppCompatActivity {
     //User Data
     private String privatePin;
 
+    //Online Status
+    private DatabaseReference mUserRef;
+    private FirebaseAuth mAuth;
+
     //Firebase
     private DatabaseReference mDatabase;
     private FirebaseUser mCurrentUser;
@@ -63,6 +67,10 @@ public class PinActivity extends AppCompatActivity {
         //Get Id of the current User
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String current_uid = mCurrentUser.getUid();
+
+        //OnlineStatus
+        mAuth = FirebaseAuth.getInstance();
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
 
@@ -110,5 +118,26 @@ public class PinActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            mUserRef.child("online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            mUserRef.child("online").setValue(System.currentTimeMillis());
+        }
     }
 }

@@ -22,6 +22,10 @@ public class CreateGroupActivity extends AppCompatActivity {
     private TextInputLayout groupname;
     private Button add_Btn;
 
+    //Online Status
+    private DatabaseReference mUserRef;
+    private FirebaseAuth mAuth;
+
     //Firebase
     private DatabaseReference mDatabaseInfo;
     private DatabaseReference mDatabaseMember;
@@ -40,6 +44,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         final String push_id = group_push.getKey();
 
         //mRootRef = FirebaseDatabase.getInstance().getReference();
+
+        //OnlineStatus
+        mAuth = FirebaseAuth.getInstance();
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         final String status_value = getIntent().getStringExtra("status_value");
         groupname = (TextInputLayout) findViewById(R.id.groupname);
@@ -101,6 +109,27 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
     private void setImage(){
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            mUserRef.child("online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            mUserRef.child("online").setValue(System.currentTimeMillis());
+        }
     }
 
 }

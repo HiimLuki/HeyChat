@@ -27,6 +27,10 @@ public class StatusActivity extends AppCompatActivity {
     private TextInputLayout mStatus;
     private Button mSavebtn;
 
+    //Online Status
+    private DatabaseReference mUserRef;
+    private FirebaseAuth mAuth;
+
 
     //Firebase
     private DatabaseReference mStatusDatabase;
@@ -51,6 +55,10 @@ public class StatusActivity extends AppCompatActivity {
         //Firebase
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         String current_uid = mCurrentUser.getUid();
+
+        //OnlineStatus
+        mAuth = FirebaseAuth.getInstance();
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
 
@@ -99,4 +107,26 @@ public class StatusActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            mUserRef.child("online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            mUserRef.child("online").setValue(System.currentTimeMillis());
+        }
+    }
+
 }

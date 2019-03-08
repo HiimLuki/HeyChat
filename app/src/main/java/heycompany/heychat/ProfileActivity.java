@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
-            mUserRef.child("online").setValue("false");
+            mUserRef.child("online").setValue(System.currentTimeMillis());
         }
     }
 

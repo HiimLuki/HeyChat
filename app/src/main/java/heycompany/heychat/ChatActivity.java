@@ -64,6 +64,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.annotations.NonNull;
@@ -112,6 +114,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_VIDEO = 2;
+
+    Timer timer = new Timer();
 
     //Video
     private Button Video_btn;
@@ -221,6 +225,7 @@ public class ChatActivity extends AppCompatActivity {
                     mLastSeenView.setText("Online");
                 } else {
 
+                    //mLastSeenView.setText("Offline");
                     GetTimeAgo getTimeAgo = new GetTimeAgo();
 
                     long lastTime = Long.parseLong(online);
@@ -556,7 +561,7 @@ public class ChatActivity extends AppCompatActivity {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            mUserRef.child("online").setValue("false");
+            mUserRef.child("online").setValue(System.currentTimeMillis());
         }
     }
 
@@ -600,6 +605,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void stopRecording() {
+
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
