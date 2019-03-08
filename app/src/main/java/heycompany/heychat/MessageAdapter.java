@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
+import android.speech.tts.Voice;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
@@ -92,18 +93,21 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
 
         if(message_type.equals("text")){
-            //((TextViewholder) viewHolder).bindText(c.getMessage());
-            TextViewholder textHolder = new TextViewholder();
-            
+
+            ((TextViewholder) viewHolder).bindText(c);
+
         }
         else if (message_type.equals("voice")){
-            VoiceViewholder voiceHolder = new VoiceViewholder();
+
+            ((VoiceViewholder) viewHolder).bindVoice(c);
         }
         else if( message_type.equals("image")) {
-            ImageViewholder imageHolder = new ImageViewholder();
+
+            ((ImageViewholder) viewHolder).bindImage(c);
         }
         else if( message_type.equals("video")) {
-            VideoViewholder videoHolder = new VideoViewholder();
+
+            ((VideoViewholder) viewHolder).bindVideo(c);
         }
 
     }
