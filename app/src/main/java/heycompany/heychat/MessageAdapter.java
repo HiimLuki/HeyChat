@@ -47,6 +47,11 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private String textMessage_SEND = "text";
 
+    private static final int VIEW_TYPE_TEXTMESSAGE = 1;
+    private static final int VIEW_TYPE_IMAGEMESSAGE = 2;
+    private static final int VIEW_TYPE_VOICEMESSAGE = 3;
+    private static final int VIEW_TYPE_VIDEOMESSAGE = 4;
+
 
     public MessageAdapter(List<Messages> mMessageList) {
 
@@ -61,23 +66,37 @@ public class MessageAdapter extends RecyclerView.Adapter{
     }
 
     @Override
+    public int getItemViewType(int position) {
+        Messages message = (Messages) mMessageList.get(position);
+        if (message.getType().equals("text")) {
+            return VIEW_TYPE_TEXTMESSAGE;
+        } else if (message.getType().equals("image")) {
+            return VIEW_TYPE_IMAGEMESSAGE;
+        } else if (message.getType().equals("voice")) {
+            return VIEW_TYPE_VOICEMESSAGE;
+        } else {
+            return VIEW_TYPE_VIDEOMESSAGE;
+        }
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         String VIEW_TYPE = String.valueOf(viewType);
 
-        if(VIEW_TYPE.equals("text")){
+        if(viewType == VIEW_TYPE_TEXTMESSAGE){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout, parent, false);
             return new TextViewholder(v);
         }
-        else if(VIEW_TYPE.equals("image")){
+        else if(viewType == VIEW_TYPE_IMAGEMESSAGE){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_single_layout, parent, false);
             return new ImageViewholder(v);
         }
-        else if(VIEW_TYPE.equals("voice")){
+        else if(viewType == VIEW_TYPE_VOICEMESSAGE){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.voice_single_layout, parent, false);
             return new VoiceViewholder(v);
         }
-        else if(VIEW_TYPE.equals("video")){
+        else if(viewType == VIEW_TYPE_VIDEOMESSAGE){
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_single_layout, parent, false);
             return new VideoViewholder(v);
         }
@@ -133,7 +152,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
     }
     private void play_video(View v, String url){
 
-        VideoView videoView = (VideoView)v.findViewById(R.id.VideoView);
+        VideoView videoView = (VideoView)v.findViewById(R.id.videoView);
         //MediaController mediaController= new MediaController(this);
         //mediaController.setAnchorView(videoView);
         //Uri uri=Uri.parse("rtsp://r2---sn-5hnekn7s.googlevideo.com/Cj0LENy73wIaNAlkloBQ6zhM9BMYDSANFC3hp_1bMOCoAUIASARg9v247KDv6eFZigELYUUtT2dxaG5EMnMM/DF798CD202779002371993871819FE595DDC140B.87F309B2D9F004DCF34561DB660C7FDD6C5934BF/yt6/1/video.3gp");
@@ -241,7 +260,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
         public VideoViewholder(View itemView) {
             super(itemView);
 
-            messageVideo = (VideoView) itemView.findViewById(R.id.VideoView);
+            messageVideo = (VideoView) itemView.findViewById(R.id.videoView);
         }
         void bindVideo(final Messages c){
             messageVideo.setOnTouchListener(new View.OnTouchListener() {
