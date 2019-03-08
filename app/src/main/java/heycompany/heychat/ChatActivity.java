@@ -72,6 +72,9 @@ import io.reactivex.annotations.NonNull;
 
 public class ChatActivity extends AppCompatActivity {
 
+    private long startR;
+    private long stopR;
+
     private String mChatUser;
     private android.support.v7.widget.Toolbar mChatToolbar;
 
@@ -335,8 +338,15 @@ public class ChatActivity extends AppCompatActivity {
 
                             } else if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                                stopRecording();
-                                uploadAudio();
+                                stopR = (System.currentTimeMillis()/1000);
+                                if(stopR > startR) {
+                                    stopRecording();
+                                    uploadAudio();
+                                }
+
+                                else {
+                                    stopRecording2();
+                                }
                                 rippleBackground.stopRippleAnimation();
 
                             }
@@ -602,14 +612,22 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         mRecorder.start();
+        startR = (System.currentTimeMillis()/1000);
     }
 
     private void stopRecording() {
 
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
     }
+
+    private void stopRecording2(){
+        mRecorder.release();
+        mRecorder =null;
+    }
+
 
     private void uploadAudio() {
 
