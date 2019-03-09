@@ -53,6 +53,10 @@ public class MessageAdapter extends RecyclerView.Adapter{
     private static final int VIEW_TYPE_VOICEMESSAGE = 3;
     private static final int VIEW_TYPE_VIDEOMESSAGE = 4;
 
+    private static final int VIEW_TYPE_TEXTMESSAGESEND = 5;
+    private static final int VIEW_TYPE_VOICEMESSAGESEND = 6;
+    private static final int VIEW_TYPE_VIDEOMESSAGESEND = 7;
+
 
     public MessageAdapter(List<Messages> mMessageList) {
 
@@ -69,14 +73,26 @@ public class MessageAdapter extends RecyclerView.Adapter{
     @Override
     public int getItemViewType(int position) {
         Messages message = (Messages) mMessageList.get(position);
-        if (message.getType().equals("text")) {
+
+        mAuth = FirebaseAuth.getInstance();
+        String current_user_id = mAuth.getCurrentUser().getUid();
+        c = mMessageList.get(position);
+        String from_user = c.getFrom();
+
+        if (message.getType().equals("text") && !(from_user.equals(current_user_id))) {
             return VIEW_TYPE_TEXTMESSAGE;
+        } else if(message.getType().equals("text") && from_user.equals(current_user_id)){
+            return VIEW_TYPE_TEXTMESSAGESEND;
+        } else if (message.getType().equals("voice") && !(from_user.equals(current_user_id))) {
+            return VIEW_TYPE_VOICEMESSAGE;
+        } else if (message.getType().equals("voice") && from_user.equals(current_user_id)) {
+            return VIEW_TYPE_VOICEMESSAGESEND;
         } else if (message.getType().equals("image")) {
             return VIEW_TYPE_IMAGEMESSAGE;
-        } else if (message.getType().equals("voice")) {
-            return VIEW_TYPE_VOICEMESSAGE;
-        } else if(message.getType().equals("video")) {
+        } else if(message.getType().equals("video") && !(from_user.equals(current_user_id))) {
             return VIEW_TYPE_VIDEOMESSAGE;
+        } else if(message.getType().equals("video") && from_user.equals(current_user_id)) {
+            return VIEW_TYPE_VIDEOMESSAGESEND;
         } else{
             return VIEW_TYPE_EMPTY;
         }
@@ -103,6 +119,20 @@ public class MessageAdapter extends RecyclerView.Adapter{
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_single_layout, parent, false);
             return new VideoViewholder(v);
         }
+
+        else if(viewType == VIEW_TYPE_TEXTMESSAGESEND){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_single_layout_sent, parent, false);
+            return new TextViewholdersend(v);
+        }
+        else if(viewType == VIEW_TYPE_VOICEMESSAGESEND){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.voice_single_layout_sent, parent, false);
+            return new VoiceViewholdersend(v);
+        }
+        else if(viewType == VIEW_TYPE_VIDEOMESSAGESEND){
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_single_layout_sent, parent, false);
+            return new VideoViewholdersend(v);
+        }
+
         return null;
     }
 
@@ -115,22 +145,34 @@ public class MessageAdapter extends RecyclerView.Adapter{
         String message_type = c.getType();
 
 
-        if(message_type.equals("text")){
+        if(message_type.equals("text") && !(from_user.equals(current_user_id))){
 
             ((TextViewholder) viewHolder).bindText(c);
-
         }
-        else if (message_type.equals("voice")){
+        else if(message_type.equals("text")&& from_user.equals(current_user_id)){
+
+            ((TextViewholdersend) viewHolder).bindText(c);
+        }
+
+        else if (message_type.equals("voice") && !(from_user.equals(current_user_id))){
 
             ((VoiceViewholder) viewHolder).bindVoice(c);
+        }
+        else if(message_type.equals("voice") && from_user.equals(current_user_id)){
+
+            ((VoiceViewholdersend) viewHolder).bindVoice(c);
         }
         else if( message_type.equals("image")) {
 
             ((ImageViewholder) viewHolder).bindImage(c);
         }
-        else if( message_type.equals("video")) {
+        else if( message_type.equals("video") && !(from_user.equals(current_user_id))) {
 
             ((VideoViewholder) viewHolder).bindVideo(c);
+        }
+        else if( message_type.equals("video") && from_user.equals(current_user_id)) {
+
+            ((VideoViewholdersend) viewHolder).bindVideo(c);
         }
 
     }
@@ -167,6 +209,13 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
         videoView.start();
 
+    }
+
+    private void stop_video(View v, String url){
+
+        VideoView videoView = (VideoView)v.findViewById(R.id.videoView);
+
+        videoView.stopPlayback();
     }
 
     private void download_video (final View v,final String url){
@@ -308,6 +357,59 @@ public class MessageAdapter extends RecyclerView.Adapter{
                 }
             });
         }
+    }
+
+    private class TextViewholdersend extends RecyclerView.ViewHolder{
+        public TextView messageText;
+
+        public TextViewholdersend (View itemView) {
+            super(itemView);
+
+            messageText = (TextView) itemView.findViewById(R.id.message_text_layout);
+        }
+        void bindText(final Messages c){
+            messageText.setText(c.getMessage());
+        }
+    }
+
+    private class VoiceViewholdersend extends RecyclerView.ViewHolder{
+        public Button messageVoice;
+
+        public VoiceViewholdersend(View itemView) {
+            super(itemView);
+
+            messageVoice = (Button) itemView.findViewById(R.id.message_voice_layout);
+        }
+
+        void bindVoice(final Messages c){
+            messageVoice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    play_sound(v, c.getMessage());
+                }
+            });
+        }
+    }
+
+    private class VideoViewholdersend extends RecyclerView.ViewHolder{
+        VideoView messageVideo;
+
+        public VideoViewholdersend(View itemView) {
+            super(itemView);
+
+            messageVideo = (VideoView) itemView.findViewById(R.id.videoView);
+        }
+        void bindVideo(final Messages c){
+            messageVideo.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    //download_video(v, c.getMessage());
+                    play_video(v, c.getMessage());
+                    return false;
+                }
+            });
+        }
+
     }
 
 }
