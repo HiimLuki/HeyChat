@@ -69,6 +69,8 @@ public class GroupChatActivity extends AppCompatActivity {
     private ImageButton mChatSendBtn;
     private EditText mChatMessageView;
 
+    private RippleBackground content;
+
     private RecyclerView mMessagesList;
 
     private final List<Messages> messagesList = new ArrayList<>();
@@ -187,6 +189,11 @@ public class GroupChatActivity extends AppCompatActivity {
 
         //recordbtn
         mRecordBtn = (Button) findViewById(R.id.mRecordBtn);
+
+        //content
+        content = (RippleBackground) findViewById(R.id.content);
+
+        content.bringToFront();
 
         //Audio
         mAudioStorage = FirebaseStorage.getInstance().getReference();

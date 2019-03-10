@@ -16,4 +16,8 @@
 
     <color name="bar">#ea8a78</color>
 
+    <color name="grey">#DDDDDD</color>
+
+    <color name="textsend">#F19970</color>
+
 </resources>

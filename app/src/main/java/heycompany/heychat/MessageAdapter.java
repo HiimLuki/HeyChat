@@ -3,6 +3,7 @@ package heycompany.heychat;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -178,23 +179,23 @@ public class MessageAdapter extends RecyclerView.Adapter{
     }
 
     private void play_sound(View v, String url){
-
         final MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try{
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mediaPlayer.start();
-                }
-            });
-            mediaPlayer.prepare();
+                mediaPlayer.setDataSource(url);
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                            mediaPlayer.start();
+                    }
+                });
+                mediaPlayer.prepare();
         }
         catch (IOException e){
             e.printStackTrace();
         }
     }
+
     private void play_video(View v, String url){
 
         VideoView videoView = (VideoView)v.findViewById(R.id.videoView);
@@ -374,6 +375,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private class VoiceViewholdersend extends RecyclerView.ViewHolder{
         public Button messageVoice;
+        int x = 0;
 
         public VoiceViewholdersend(View itemView) {
             super(itemView);
@@ -382,12 +384,24 @@ public class MessageAdapter extends RecyclerView.Adapter{
         }
 
         void bindVoice(final Messages c){
-            messageVoice.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    play_sound(v, c.getMessage());
-                }
-            });
+
+
+                messageVoice.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(x == 0) {
+                            Log.d("voice", "voice" + x);
+                            play_sound(v, c.getMessage());
+                            messageVoice.setBackgroundResource(R.drawable.pause);
+                            x = 1;
+                        }else if(x == 1){
+                            messageVoice.setBackgroundResource(R.drawable.playbutton);
+                            x = 0;
+                        }
+                    }
+                });
+
         }
     }
 
