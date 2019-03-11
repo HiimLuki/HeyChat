@@ -33,10 +33,15 @@
 
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:visibility="invisible"
         app:color_array="@array/dot_colors"
         app:dot_radius="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/messages_list"
+        app:layout_constraintEnd_toEndOf="@+id/messages_list"
+        app:layout_constraintStart_toStartOf="@+id/messages_list"
         app:number_of_dots="3" />
 
     <com.skyfishjy.library.RippleBackground

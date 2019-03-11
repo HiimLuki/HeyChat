@@ -215,6 +215,7 @@ public class ChatActivity extends AppCompatActivity {
         content = (RippleBackground) findViewById(R.id.content);
 
         content.bringToFront();
+        dotloader.bringToFront();
 
         //Audio
         mAudioStorage = FirebaseStorage.getInstance().getReference();
