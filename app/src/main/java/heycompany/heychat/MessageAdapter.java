@@ -315,7 +315,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
 
             messageText.setText(c.getMessage());
         }
@@ -338,7 +338,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
 
             messageVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -369,7 +369,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
 
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(messageImage);
         }
@@ -393,7 +393,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
                 cal.setTimeInMillis(timestamp);
 
                 android.text.format.DateFormat df = new android.text.format.DateFormat();
-                messageTime.setText(df.format("hh:mm", cal).toString());
+                messageTime.setText(df.format("kk:mm", cal).toString());
 
             messageVoice.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -422,7 +422,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
         }
     }
     private class VoiceViewholdersend extends RecyclerView.ViewHolder{
@@ -444,7 +444,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
 
                 messageVoice.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -482,7 +482,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("hh:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());
 
             messageVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
