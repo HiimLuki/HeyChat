@@ -33,6 +33,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -296,26 +300,46 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private class TextViewholder extends  RecyclerView.ViewHolder{
         public TextView messageText;
+        public TextView messageTime;
 
         public TextViewholder(View itemView) {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.message_text_layout);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
         void bindText(final Messages c){
+
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
+
             messageText.setText(c.getMessage());
         }
     }
 
     private class VideoViewholder extends RecyclerView.ViewHolder{
         VideoView messageVideo;
+        public TextView messageTime;
 
         public VideoViewholder(View itemView) {
             super(itemView);
 
             messageVideo = (VideoView) itemView.findViewById(R.id.videoView);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
         void bindVideo(final Messages c){
+
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
+
             messageVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -330,27 +354,47 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private class ImageViewholder extends RecyclerView.ViewHolder{
         public ImageView messageImage;
+        public TextView messageTime;
 
         public ImageViewholder(View itemView) {
             super(itemView);
 
             messageImage = (ImageView) itemView.findViewById(R.id.message_image_layout);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
         void bindImage(final Messages c){
+
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
+
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(messageImage);
         }
     }
 
     private class VoiceViewholder extends RecyclerView.ViewHolder{
         public Button messageVoice;
+        public TextView messageTime;
 
         public VoiceViewholder(View itemView) {
             super(itemView);
 
             messageVoice = (Button) itemView.findViewById(R.id.message_voice_layout);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
 
             void bindVoice(final Messages c){
+
+                Long timestamp = c.getTime();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(timestamp);
+
+                android.text.format.DateFormat df = new android.text.format.DateFormat();
+                messageTime.setText(df.format("hh:mm", cal).toString());
+
             messageVoice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -362,29 +406,45 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private class TextViewholdersend extends RecyclerView.ViewHolder{
         public TextView messageText;
+        public TextView messageTime;
 
         public TextViewholdersend (View itemView) {
             super(itemView);
 
             messageText = (TextView) itemView.findViewById(R.id.message_text_layout);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
         void bindText(final Messages c){
             messageText.setText(c.getMessage());
+
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
         }
     }
-
     private class VoiceViewholdersend extends RecyclerView.ViewHolder{
         public Button messageVoice;
         int x = 0;
+        public TextView messageTime;
 
         public VoiceViewholdersend(View itemView) {
             super(itemView);
 
             messageVoice = (Button) itemView.findViewById(R.id.message_voice_layout);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
 
         void bindVoice(final Messages c){
 
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
 
                 messageVoice.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -407,13 +467,23 @@ public class MessageAdapter extends RecyclerView.Adapter{
 
     private class VideoViewholdersend extends RecyclerView.ViewHolder{
         VideoView messageVideo;
+        public TextView messageTime;
 
         public VideoViewholdersend(View itemView) {
             super(itemView);
 
             messageVideo = (VideoView) itemView.findViewById(R.id.videoView);
+            messageTime = (TextView) itemView.findViewById(R.id.message_time);
         }
         void bindVideo(final Messages c){
+
+            Long timestamp = c.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            messageTime.setText(df.format("hh:mm", cal).toString());
+
             messageVideo.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
