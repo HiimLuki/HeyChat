@@ -48,6 +48,7 @@ public class ChatsFragment extends Fragment {
     private DatabaseReference mMessageDatabase;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mGroupDatabase;
+    private DatabaseReference mGroupMessageDatabase;
 
     private FirebaseAuth mAuth;
 
@@ -85,6 +86,7 @@ public class ChatsFragment extends Fragment {
         mConvDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
+        mGroupMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages");
         mUsersDatabase.keepSynced(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -222,7 +224,7 @@ public class ChatsFragment extends Fragment {
 
                 final String list_user_id = getRef(i).getKey();
 
-                Query lastGroupMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
+                Query lastGroupMessageQuery = mGroupMessageDatabase.child(list_user_id).limitToLast(1);
 
                 lastGroupMessageQuery.addChildEventListener(new ChildEventListener() {
                     @Override

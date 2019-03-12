@@ -75,7 +75,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     private final List<Messages> messagesList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
-    private MessageAdapter mAdapter;
+    private GroupMessageAdapter mAdapter;
 
     //private static final int GALLERY_PICK = 1;
 
@@ -164,7 +164,7 @@ public class GroupChatActivity extends AppCompatActivity {
         mChatSendBtn = (ImageButton) findViewById(R.id.chat_send_btn);
         mChatMessageView = (EditText) findViewById(R.id.chat_message_view);
 
-        mAdapter = new MessageAdapter(messagesList);
+        mAdapter = new GroupMessageAdapter(messagesList);
 
         mMessagesList = (RecyclerView) findViewById(R.id.messages_list);
         mLinearLayout = new LinearLayoutManager(this);
@@ -179,8 +179,6 @@ public class GroupChatActivity extends AppCompatActivity {
 
         //Image
         mImageStorage = FirebaseStorage.getInstance().getReference();
-
-        loadMessages(groupid);
 
         mTitleView.setText(userName);
 
