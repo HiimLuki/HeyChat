@@ -8,6 +8,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -92,7 +93,6 @@ public class GroupChatActivity extends AppCompatActivity {
     private DotLoader dotloader;
 
     //VoiceMessage
-    private Button mRecordBtn;
     private MediaRecorder mRecorder;
     private String mFileName = null;
     private static final String LOG_TAG = "Record_log";
@@ -100,8 +100,12 @@ public class GroupChatActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_VIDEO = 2;
 
-    //Video
-    private Button Video_btn;
+
+    //Chatbar
+    private ConstraintLayout chatbar;
+    private Button videobtn;
+    private Button Image_btn;
+    private Button voicebtn;
 
     //Permission
     int REQ_CODE_RECORD_AUDIO = 45;
@@ -117,7 +121,7 @@ public class GroupChatActivity extends AppCompatActivity {
         //Leiste unsichtbar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 
@@ -137,7 +141,7 @@ public class GroupChatActivity extends AppCompatActivity {
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
         mChatUser = getIntent().getStringExtra("user_id");
-        String userName = getIntent().getStringExtra("user_name");
+        final String userName = getIntent().getStringExtra("user_name");
 
         //OnlineStatus
         mAuth = FirebaseAuth.getInstance();
@@ -185,28 +189,33 @@ public class GroupChatActivity extends AppCompatActivity {
         //Chatwatcher
         mChatMessageView.addTextChangedListener(writeTextWatcher);
 
-        //recordbtn
-        mRecordBtn = (Button) findViewById(R.id.mRecordBtn);
-
         //content
         content = (RippleBackground) findViewById(R.id.content);
 
         content.bringToFront();
+        content.setZ(2);
         dotloader.bringToFront();
 
         //Audio
         mAudioStorage = FirebaseStorage.getInstance().getReference();
 
-        //Video
-        Video_btn = (Button) findViewById(R.id.chat_video);
+
+        //Chatbar
+        chatbar = (ConstraintLayout) findViewById(R.id.chatbar);
+        videobtn = (Button) findViewById(R.id.videobtn);
+        Image_btn = (Button) findViewById(R.id.chat_image);
+        voicebtn = (Button) findViewById(R.id.voicebtn);
+
+        chatbar.setZ(1);
 
 
         mChatToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent GroupInfoIntent = new Intent(GroupChatActivity.this,GroupInfo.class);
+                GroupInfoIntent.putExtra("user_name", userName);
                 startActivity(GroupInfoIntent);
-                Log.d("test", "test");
+
             }
         });
 
@@ -221,6 +230,22 @@ public class GroupChatActivity extends AppCompatActivity {
 
         //Onclick für Images verschicken, Öffnet Gallery
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
+            private int x = 1;
+            @Override
+            public void onClick(View v) {
+
+                if(x == 1) {
+                    chatbar.setVisibility(View.VISIBLE);
+                    x = 2;
+                }
+                else if(x == 2){
+                    chatbar.setVisibility(View.INVISIBLE);
+                    x = 1;
+                }
+            }
+        });
+
+        Image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -229,11 +254,12 @@ public class GroupChatActivity extends AppCompatActivity {
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), SELECT_PICTURE);
+
             }
         });
 
         //Onclick für Videos verschicken, öffnet Gallery
-        Video_btn.setOnClickListener(new View.OnClickListener() {
+        videobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -253,7 +279,7 @@ public class GroupChatActivity extends AppCompatActivity {
         final RippleBackground rippleBackground = (RippleBackground) findViewById(R.id.content);
 
         //Erst Abfrage nach Permissions, dann bei Ontouch Mikrofon aufnehmen und Rippleeffekt starten
-        mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
+        voicebtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 

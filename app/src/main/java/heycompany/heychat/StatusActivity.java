@@ -1,6 +1,7 @@
 package heycompany.heychat;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -94,6 +95,10 @@ public class StatusActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 mProgress.dismiss();
+
+                                Intent chatIntent = new Intent(StatusActivity.this, SettingsActivity.class);
+                                startActivity(chatIntent);
+                                finish();
                             } else {
                                 Toast.makeText(StatusActivity.this, "There were some errors while saving", Toast.LENGTH_LONG).show();
                             }

@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class GroupInfo extends AppCompatActivity {
+
+    public TextView groupname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +23,11 @@ public class GroupInfo extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_group_info);
+
+        final String userName = getIntent().getStringExtra("user_name");
+
+        groupname = (TextView) findViewById(R.id.group_name);
+        groupname.setText(userName);
+
     }
 }

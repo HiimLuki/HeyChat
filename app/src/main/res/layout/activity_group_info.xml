@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.rey.material.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,15 +7,31 @@
     android:background="@drawable/background"
     tools:context=".GroupInfo">
 
+    <TextView
+        android:id="@+id/group_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/avenirroman"
+        android:text="DieHobbylosen"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/groupimage" />
+
     <Button
         android:id="@+id/add_contact"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="17dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/addcontact" />
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/addcontact"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/chevronleft"
@@ -23,16 +39,24 @@
         android:layout_height="44dp"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/add_contact"
-        android:background="@drawable/chevronleft" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/chevronleft"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/change"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignEnd="@+id/add_contact"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="214dp"
-        android:background="@drawable/pencil" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="175dp"
+        android:background="@drawable/pencil"
+        app:layout_constraintBottom_toBottomOf="@+id/groupimage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_contact" />
 
     <ImageView
         android:id="@+id/groupimage"
@@ -45,4 +69,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/groupprofile" />
 
-</com.rey.material.widget.RelativeLayout>
+</android.support.constraint.ConstraintLayout>

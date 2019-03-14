@@ -364,12 +364,12 @@ public class MessageAdapter extends RecyclerView.Adapter{
         }
         void bindImage(final Messages c){
 
-            Long timestamp = c.getTime();
+           /*Long timestamp = c.getTime();
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp);
 
             android.text.format.DateFormat df = new android.text.format.DateFormat();
-            messageTime.setText(df.format("kk:mm", cal).toString());
+            messageTime.setText(df.format("kk:mm", cal).toString());*/
 
             Picasso.get().load(c.getMessage()).placeholder(R.drawable.placeholder).into(messageImage);
         }

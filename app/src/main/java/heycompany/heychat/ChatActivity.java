@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -108,11 +109,13 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
 
+    //writing
+    private DatabaseReference mCurrentUserChatRef;
+
     //Dot
     private DotLoader dotloader;
 
     //VoiceMessage
-    private Button mRecordBtn;
     private MediaRecorder mRecorder;
     private String mFileName = null;
     private static final String LOG_TAG = "Record_log";
@@ -120,15 +123,16 @@ public class ChatActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_VIDEO = 2;
 
-    Timer timer = new Timer();
-
-    //Video
-    private Button Video_btn;
-
     //Permission
     int REQ_CODE_RECORD_AUDIO = 45;
     int REQ_CODE_WRITE_STORAGE = 44;
     int REQ_CODE_READ_STORAGE = 43;
+
+    //Chatbar
+    private ConstraintLayout chatbar;
+    private Button videobtn;
+    private Button Image_btn;
+    private Button voicebtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +141,7 @@ public class ChatActivity extends AppCompatActivity {
         //Leiste unsichtbar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 
@@ -162,6 +166,10 @@ public class ChatActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         mCurrentUserID = mAuth.getCurrentUser().getUid();
+
+        //Writing
+
+        mCurrentUserChatRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrentUserID).child(mChatUser);
 
         getSupportActionBar().setTitle(null);
 
@@ -194,7 +202,8 @@ public class ChatActivity extends AppCompatActivity {
         mMessagesList.setAdapter(mAdapter);
 
         mLinearLayout.setStackFromEnd(true);
-        //mMessagesList.scrollToPosition(messagesList.size() - 1);
+        //mMessagesList.scrollToPosition(mAdapter.getItemCount()-1);
+       // mMessagesList.scrollToPosition(messagesList.size() - 1);
 
         //Image
         mImageStorage = FirebaseStorage.getInstance().getReference();
@@ -208,20 +217,23 @@ public class ChatActivity extends AppCompatActivity {
         //Chatwatcher
         mChatMessageView.addTextChangedListener(writeTextWatcher);
 
-        //recordbtn
-        mRecordBtn = (Button) findViewById(R.id.mRecordBtn);
-
         //content
         content = (RippleBackground) findViewById(R.id.content);
 
         content.bringToFront();
+        content.setZ(2);
         dotloader.bringToFront();
 
         //Audio
         mAudioStorage = FirebaseStorage.getInstance().getReference();
 
-        //Video
-        Video_btn = (Button) findViewById(R.id.chat_video);
+        //Chatbar
+        chatbar = (ConstraintLayout) findViewById(R.id.chatbar);
+        videobtn = (Button) findViewById(R.id.videobtn);
+        Image_btn = (Button) findViewById(R.id.chat_image);
+        voicebtn = (Button) findViewById(R.id.voicebtn);
+
+        chatbar.setZ(1);
 
 
         //Add Listener, wenn sich in User-Branch etwas ändert dann werden Daten in der App geupdated
@@ -300,19 +312,23 @@ public class ChatActivity extends AppCompatActivity {
 
         //Onclick für Images verschicken, Öffnet Gallery
         mChatAddBtn.setOnClickListener(new View.OnClickListener() {
+            private int x = 1;
             @Override
             public void onClick(View v) {
 
-                Intent galleryIntent = new Intent();
-                galleryIntent.setType("image/*");
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), SELECT_PICTURE);
+                if(x == 1) {
+                    chatbar.setVisibility(View.VISIBLE);
+                    x = 2;
+                }
+                else if(x == 2){
+                    chatbar.setVisibility(View.INVISIBLE);
+                    x = 1;
+                }
             }
         });
 
         //Onclick für Videos verschicken, öffnet Gallery
-        Video_btn.setOnClickListener(new View.OnClickListener() {
+        videobtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -324,6 +340,19 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        Image_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent galleryIntent = new Intent();
+                galleryIntent.setType("image/*");
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), SELECT_PICTURE);
+
+            }
+        });
+
         //VoiceMessage
 
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -331,8 +360,8 @@ public class ChatActivity extends AppCompatActivity {
 
         final RippleBackground rippleBackground = (RippleBackground) findViewById(R.id.content);
 
-        //Erst Abfrage nach Permissions, dann bei Ontouch Mikrofon aufnehmen und Rippleeffekt starten
-        mRecordBtn.setOnTouchListener(new View.OnTouchListener() {
+
+        voicebtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -371,6 +400,7 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         });
+
 
     }
 
@@ -594,9 +624,24 @@ public class ChatActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String nachricht = mChatMessageView.getText().toString().trim();
             if (!nachricht.isEmpty()) {
-                dotloader.setVisibility(View.VISIBLE);
+
+                HashMap<String, String> addTextWatcherMap = new HashMap<>();
+                addTextWatcherMap.put("writing", "true");
+                mCurrentUserChatRef.setValue(addTextWatcherMap);
+
+                writingChat();
+
+
+                //dotloader.setVisibility(View.VISIBLE);
             } else {
-                dotloader.setVisibility(View.INVISIBLE);
+
+                HashMap<String, String> addTextWatcherMap = new HashMap<>();
+                addTextWatcherMap.put("writing", "false");
+                mCurrentUserChatRef.setValue(addTextWatcherMap);
+
+                writingChat();
+
+                //dotloader.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -605,6 +650,49 @@ public class ChatActivity extends AppCompatActivity {
 
         }
     };
+
+    private void writingChat(){
+        DatabaseReference mCurrentUserRef;
+        DatabaseReference mChatUserRef;
+
+        mCurrentUserRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrentUserID).child(mChatUser).child("writing");
+        mChatUserRef = FirebaseDatabase.getInstance().getReference().child("Chat").child(mChatUser).child(mCurrentUserID).child("writing");
+
+       mCurrentUserRef.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               final String writing = dataSnapshot.getValue().toString();
+               if(writing.equals("true")){
+                   dotloader.setVisibility(View.VISIBLE);
+               }
+               else{
+                   dotloader.setVisibility(View.INVISIBLE);
+               }
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+
+           }
+       });
+       mChatUserRef.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               final String writing = dataSnapshot.getValue().toString();
+               if(writing.equals("true")){
+                   dotloader.setVisibility(View.VISIBLE);
+               }
+               else{
+                   dotloader.setVisibility(View.INVISIBLE);
+               }
+           }
+
+           @Override
+           public void onCancelled(DatabaseError databaseError) {
+
+           }
+       });
+    }
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
